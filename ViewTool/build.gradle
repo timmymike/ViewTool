@@ -39,8 +39,6 @@ dependencies {
     // Resources
     implementation 'androidx.appcompat:appcompat:1.4.1'
 
-    // Coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
 
 }

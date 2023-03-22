@@ -3,7 +3,6 @@ package com.timmymike.viewtool
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import kotlinx.coroutines.*
 
 /**由timmymike整理的畫面美觀工具*/
 
