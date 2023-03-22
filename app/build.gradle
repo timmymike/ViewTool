@@ -30,6 +30,10 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+
+    defaultConfig {
+        compileSdkPreview = "UpsideDownCake"
+    }
 }
 
 dependencies {
@@ -42,4 +46,5 @@ dependencies {
     implementation project(":ViewTool")
 
     implementation 'com.github.timmymike:LogTool:1.0.3'
+    implementation 'androidx.core:core-ktx:+'
 }
