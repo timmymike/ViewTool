@@ -41,7 +41,7 @@ fun View.setRippleBackground(color: Int, states: Drawable? = background) {
  * @date 2021/03/21
  * @version
  */
-fun createShapeDrawable(context: Context, colorID: Int, radii: FloatArray?, strokeWidth: Int, strokeColorID: Int, gradientDrawableShape: Int): GradientDrawable {
+private fun createShapeDrawable(context: Context, colorID: Int, radii: FloatArray?, strokeWidth: Int, strokeColorID: Int, gradientDrawableShape: Int): GradientDrawable {
 
     val gradientDrawable = GradientDrawable()
     if (colorID != 0)

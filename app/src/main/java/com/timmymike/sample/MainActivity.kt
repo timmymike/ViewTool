@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.timmymike.logtool.loge
 import com.timmymike.viewtool.*
@@ -18,7 +19,10 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.tv_test).run {
             isClickable = true
-            setOnClickListener { isSelected = !isSelected }
+            clickWithTrigger {
+                loge("1觸發點擊！")
+                isSelected = !isSelected
+            }
 
             setTextSize(14)
 //            background = getRectangleBg(tldp = 40, trdp = 40, left = false, bgColorID = R.color.purple_200, strokeWidth = 10, strokeColorID = R.color.teal_200)
@@ -26,17 +30,27 @@ class MainActivity : AppCompatActivity() {
                 setPadding(it, it, it, it)
             }
             loge("tv1佔比總寬度=>${this.getRealityWidth().toFloat() / getScreenWidthPixels()}")
-            setPressedTextColor(android.R.color.holo_green_dark, android.R.color.holo_blue_dark,couldSelected = false)
+            setPressedTextColor(android.R.color.holo_green_dark, android.R.color.holo_blue_dark, couldSelected = false)
             background = getRepeatDrawable(R.drawable.ic_launcher_foreground)
 //            setBackgroundResource(R.drawable.ic_class_checkbox_checked)
 //            background = setPressedImage(R.drawable.ic_class_checkbox_checked,-1)
             setRippleBackground(android.R.color.holo_red_dark)
 
         }
-
+        var count = 0
         findViewById<TextView>(R.id.tv_test2).run {
             isClickable = true
-            setOnClickListener { isSelected = !isSelected }
+            clickWithTrigger {
+                loge("2觸發點擊！")
+                isSelected = !isSelected
+                Toast.makeText(context, "觸發點擊。${++count}", Toast.LENGTH_SHORT).show()
+//                background = setPressedBackground(
+//                    getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
+//                    getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
+//                    true
+//                )
+//                setRippleBackground(android.R.color.holo_orange_dark)
+            }
 
             setTextSize(14)
             30.let {
@@ -47,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
                 true
             )
-            setPressedTextColor(android.R.color.holo_green_dark, android.R.color.holo_blue_dark,couldSelected = true)
+            setPressedTextColor(android.R.color.holo_green_dark, android.R.color.holo_blue_dark, couldSelected = true)
 //            loge("tv2佔比總寬度=>${this.getRealityWidth().toFloat() / getScreenWidthPixels()}")
 //            background = getRepeatDrawable(R.drawable.ic_class_checkbox_checked)
 //            setBackgroundResource(R.drawable.ic_class_checkbox_checked)
@@ -64,10 +78,9 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<CheckBox>(R.id.cb_test).run {
             setOnClickListener { isSelected = !isSelected }
-
             setCheckDrawable(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_class_checkbox_checked)
             setPressedBackground(R.color.purple_200, R.color.teal_700, true)
-            setRippleBackground(android.R.color.holo_blue_dark)
+            setRippleBackground(android.R.color.holo_red_dark)
         }
     }
 
