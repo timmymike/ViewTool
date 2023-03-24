@@ -2,7 +2,6 @@ package com.timmymike.viewtool
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -265,7 +264,7 @@ fun ViewGroup.resetLayout(block: ((View) -> Unit) = {}) {
  * @date formatted 2023/03/21
  */
 fun Context.getDrawableHeight(id: Int, maxWidth: Int): Int {
-    val drawable = this.getResourceDrawable(id)
+    val drawable = getResourceDrawable(id)
     val w = drawable.intrinsicWidth.toFloat()
     val h = drawable.intrinsicHeight.toFloat()
     val scale = h / w

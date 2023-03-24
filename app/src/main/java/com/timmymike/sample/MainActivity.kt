@@ -1,7 +1,7 @@
 package com.timmymike.sample
 
+import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,12 +28,12 @@ class MainActivity : AppCompatActivity() {
                 setPadding(it, it, it, it)
             }
             loge("tv1佔比總寬度=>${this.getRealityWidth().toFloat() / getScreenWidthPixels()}")
-            setPressedTextColor(android.R.color.holo_green_dark, android.R.color.holo_blue_dark, beSelected = false)
+            setClickTextColorStateById(android.R.color.holo_green_dark, android.R.color.holo_blue_dark)
 
-            background = setPressedBackground(
+            background = setClickBgState(
+                getRoundBg(500,android.R.color.holo_purple,R.color.black,20),
                 getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
                 getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
-                false
             )
 //            background = getRepeatDrawable(R.drawable.ic_launcher_foreground)
 //            background = getTintedDrawable(R.drawable.ic_launcher_foreground, android.R.color.holo_green_dark)
@@ -57,32 +57,31 @@ class MainActivity : AppCompatActivity() {
                 setPaddingByDpUnit(it, it, it, it)
             }
 
-            background = setPressedBackground(
+            background = setClickBgState(
                 getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
-                getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
-                true
+                selectedDrawable = getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
             )
 
-            setPressedTextColor(android.R.color.holo_green_dark, android.R.color.holo_blue_dark, beSelected = true)
+            setClickTextColorState(Color.RED,Color.BLUE,Color.GRAY)
             loge("tv2佔比總寬度=>${this.getRealityWidth().toFloat() / getScreenWidthPixels()}")
 //            background = getRepeatDrawable(R.drawable.ic_class_checkbox_checked)
 //            setBackgroundResource(R.drawable.ic_class_checkbox_checked)
 //            background = setPressedImage(R.drawable.ic_class_checkbox_checked,-1)
-            setRippleBackground(android.R.color.holo_orange_dark)
+//            setRippleBackground(android.R.color.holo_orange_dark)
         }
 
         findViewById<ImageView>(R.id.iv_test).run {
             isClickable = true
             setOnClickListener { isSelected = !isSelected }
-            setPressedBackground(R.color.purple_700, R.color.teal_700, false)
-            setPressedImage(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_class_checkbox_checked,false)
+            setClickBgStateById(R.color.purple_700, R.color.teal_700, R.color.white)
+            setClickImgStateById(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_launcher_foreground, R.drawable.ic_class_checkbox_checked)
             setRippleBackground(android.R.color.holo_green_dark)
         }
         findViewById<CheckBox>(R.id.cb_test).run {
             setOnClickListener { isSelected = !isSelected }
             text = getResourceString(R.string.app_name)
             setCheckDrawable(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_class_checkbox_checked)
-            setPressedBackground(R.color.purple_200, R.color.teal_700, true)
+            setClickBgStateById(R.color.purple_200, R.color.teal_700)
             setRippleBackground(android.R.color.holo_red_dark)
         }
     }

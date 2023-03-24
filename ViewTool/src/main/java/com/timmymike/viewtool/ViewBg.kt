@@ -13,7 +13,6 @@ import androidx.core.graphics.drawable.toBitmap
 
 
 /**由timmymike整理的畫面美觀工具*/
-
 /**
  * 設定水波紋
  * @param colorID 水波紋顏色
@@ -44,8 +43,7 @@ fun View.setRippleBackground(colorId: Int, maskArea: Drawable? = background, sho
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun getRoundBg(
-    context: Context,
+fun Context.getRoundBg(
     corner: Int,
     bgColorID: Int, strokeColorID: Int = 0, strokeWidth: Int = 0
 ): GradientDrawable {
@@ -53,7 +51,7 @@ fun getRoundBg(
     val tr = corner.dpToPx
     val bl = corner.dpToPx
     val br = corner.dpToPx
-    return createShapeDrawable(context, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
+    return createShapeDrawable(this, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
 }
 
 /**
