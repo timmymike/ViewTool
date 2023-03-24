@@ -81,7 +81,6 @@ fun getScreenHeightPixels(): Int {
 
 /**
  * 設定 view的長寬 單位為畫素(pixel)
- * @param view
  * @param w
  * @param h
  * @author Wang / Robert

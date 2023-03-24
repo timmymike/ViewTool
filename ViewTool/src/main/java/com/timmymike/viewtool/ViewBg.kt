@@ -15,7 +15,7 @@ import androidx.core.graphics.drawable.toBitmap
 /**由timmymike整理的畫面美觀工具*/
 /**
  * 設定水波紋
- * @param colorID 水波紋顏色
+ * @param colorId 水波紋顏色
  * @param maskArea 要填滿與顯示的背景
  * @author Timmy.Hsieh
  * @date formatted 2023/03/21
@@ -35,7 +35,6 @@ fun View.setRippleBackground(colorId: Int, maskArea: Drawable? = background, sho
 }
 
 /**
- * @param context
  * @param corner 圓角弧度(Dp)
  * @param bgColorID 背景填滿色
  * @param strokeColorID 邊框顏色
@@ -55,7 +54,6 @@ fun Context.getRoundBg(
 }
 
 /**
- * @param context
  * @param tldp 左上弧度 (Dp)
  * @param trdp 右上弧度 (Dp)
  * @param bldp 左下弧度 (Dp)
