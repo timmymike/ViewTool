@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
 //            background = getTintedDrawable(R.drawable.ic_launcher_foreground, android.R.color.holo_green_dark)
 //            setBackgroundResource(R.drawable.ic_class_checkbox_checked)
 //            background = setPressedImage(R.drawable.ic_class_checkbox_checked,-1)
-            setRippleBackground(android.R.color.holo_red_dark)
+//            setRippleBackgroundById(android.R.color.holo_red_dark)
+            setRippleBackground(Color.BLUE)
 
         }
         var count = 0
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 isSelected = !isSelected
                 Toast.makeText(context, "觸發點擊。${++count}", Toast.LENGTH_SHORT).show()
 
-//                setRippleBackground(android.R.color.holo_orange_dark)
+//                setRippleBackgroundById(android.R.color.holo_orange_dark)
             }
 
             setTextSize(50)
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 //            background = getRepeatDrawable(R.drawable.ic_class_checkbox_checked)
 //            setBackgroundResource(R.drawable.ic_class_checkbox_checked)
 //            background = setPressedImage(R.drawable.ic_class_checkbox_checked,-1)
-//            setRippleBackground(android.R.color.holo_orange_dark)
+//            setRippleBackgroundById(android.R.color.holo_orange_dark)
         }
 
         findViewById<ImageView>(R.id.iv_test).run {
@@ -75,14 +76,14 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener { isSelected = !isSelected }
             setClickBgStateById(R.color.purple_700, R.color.teal_700, R.color.white)
             setClickImgStateById(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_launcher_foreground, R.drawable.ic_class_checkbox_checked)
-            setRippleBackground(android.R.color.holo_green_dark)
+            setRippleBackgroundById(android.R.color.holo_green_dark)
         }
         findViewById<CheckBox>(R.id.cb_test).run {
             setOnClickListener { isSelected = !isSelected }
             text = getResourceString(R.string.app_name)
             setCheckDrawable(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_class_checkbox_checked)
             setClickBgStateById(R.color.purple_200, R.color.teal_700)
-            setRippleBackground(android.R.color.holo_red_dark)
+            setRippleBackgroundById(android.R.color.holo_red_dark)
         }
     }
 

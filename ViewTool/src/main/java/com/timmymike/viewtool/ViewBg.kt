@@ -7,6 +7,7 @@ import android.graphics.Shader
 import android.graphics.drawable.*
 import android.os.Build
 import android.view.View
+import androidx.annotation.ColorRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -15,18 +16,39 @@ import androidx.core.graphics.drawable.toBitmap
 /**由timmymike整理的畫面美觀工具*/
 /**
  * 設定水波紋
- * @param colorId 水波紋顏色
+ * @param colorId 水波紋顏色(Resource編號)
  * @param maskArea 要填滿與顯示的背景
  * @author Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun View.setRippleBackground(colorId: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
+fun View.setRippleBackgroundById(@ColorRes colorId: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
         this.background = RippleDrawable(
             ColorStateList(
                 arrayOf(intArrayOf()),
                 intArrayOf(this.getResourceColor(colorId))
+            ),
+            if (showOrigBgAfterAddRipple) maskArea else null,
+            maskArea?.current
+        )
+    }
+}
+
+/**
+ * 設定水波紋
+ * @param color 水波紋顏色
+ * @param maskArea 要填滿與顯示的背景
+ * @author Timmy.Hsieh
+ * @date formatted 2023/03/21
+ */
+fun View.setRippleBackground(color: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+        this.background = RippleDrawable(
+            ColorStateList(
+                arrayOf(intArrayOf()),
+                intArrayOf(color)
             ),
             if (showOrigBgAfterAddRipple) maskArea else null,
             maskArea?.current
