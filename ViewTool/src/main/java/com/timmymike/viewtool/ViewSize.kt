@@ -2,9 +2,11 @@ package com.timmymike.viewtool
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.core.view.children
 import kotlin.math.roundToInt
@@ -329,3 +331,20 @@ fun String.getUriImageWidth(context: Context, maxHeight: Int): Int {
 
     return ansWidth.toInt()
 }
+/**
+ * 繪製後Log出顯示內容的實際寬高(主要用於debug)
+ * @param tagName
+ * @author Timmy.Hsieh
+ * @date 2023/08/24
+ */
+fun View.showLayout(tagName: String = "Layout內容寬高"): View = this.also { layout ->
+    this.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            val width: Int = layout.measuredWidth
+            val height: Int = layout.measuredHeight
+            Log.e(tagName,"內容實際寬高=>{$width,$height} layout=>${layout} ")
+        }
+    })
+}
+
