@@ -20,6 +20,10 @@ class AnimActivity : AppCompatActivity() {
     private val btnRight by lazy { findViewById<Button>(R.id.btn_right) }
     private val ivRight by lazy { findViewById<ImageView>(R.id.iv_right) }
 
+
+    private val btnFade by lazy { findViewById<Button>(R.id.btn_fade) }
+    private val ivFade by lazy { findViewById<ImageView>(R.id.iv_fade) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anim)
@@ -32,6 +36,8 @@ class AnimActivity : AppCompatActivity() {
 
         sampleRightHide()
 
+        sampleFade()
+
 
     }
 
@@ -41,7 +47,7 @@ class AnimActivity : AppCompatActivity() {
         btnTop.run {
             clickWithTrigger {
 
-                loge("btnTopBtom 觸發點擊！")
+                loge("btnTop 觸發點擊！")
                 isSelected = !isSelected
 
                 if (!isSelected) {
@@ -62,7 +68,7 @@ class AnimActivity : AppCompatActivity() {
         btnBtom.run {
             clickWithTrigger {
 
-                loge("btnTopBtom 觸發點擊！")
+                loge("btnBtom 觸發點擊！")
                 isSelected = !isSelected
 
                 if (!isSelected) {
@@ -81,7 +87,7 @@ class AnimActivity : AppCompatActivity() {
         btnLeft.run {
             clickWithTrigger {
                 isSelected = !isSelected
-                loge("btnRightLeft 觸發點擊！")
+                loge("btnLeft 觸發點擊！")
                 if (!isSelected) {
                     text = "向左隱藏"
                     ivLeft.anim2RightShow()
@@ -99,7 +105,7 @@ class AnimActivity : AppCompatActivity() {
         btnRight.run {
             clickWithTrigger {
                 isSelected = !isSelected
-                loge("btnRightLeft 觸發點擊！")
+                loge("btnRight 觸發點擊！")
                 if (!isSelected) {
                     text = "向右隱藏"
                     ivRight.anim2LeftShow()
@@ -108,10 +114,24 @@ class AnimActivity : AppCompatActivity() {
                     ivRight.anim2RightHide()
                 }
             }
-
         }
-
     }
 
+    // 淡出淡入 Sample
+    private fun sampleFade() {
+        btnFade.run {
+            clickWithTrigger {
+                isSelected = !isSelected
+                loge("btnFade 觸發點擊！")
+                if (!isSelected) {
+                    text = "淡出"
+                    ivFade.fadeIn()
+                } else {
+                    text = "淡入"
+                    ivFade.fadeOut()
+                }
+            }
+        }
+    }
 }
 
