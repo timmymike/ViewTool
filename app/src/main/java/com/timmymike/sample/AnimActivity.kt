@@ -3,30 +3,19 @@ package com.timmymike.sample
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.timmymike.logtool.format
 import com.timmymike.logtool.loge
+import com.timmymike.sample.databinding.ActivityAnimBinding
 import com.timmymike.viewtool.*
 
 class AnimActivity : AppCompatActivity() {
 
-    private val btnTop by lazy { findViewById<Button>(R.id.btn_top) }
-    private val ivTop by lazy { findViewById<ImageView>(R.id.iv_top) }
-
-    private val btnBtom by lazy { findViewById<Button>(R.id.btn_bottom) }
-    private val ivBtom by lazy { findViewById<ImageView>(R.id.iv_bottom) }
-
-    private val btnLeft by lazy { findViewById<Button>(R.id.btn_left) }
-    private val ivLeft by lazy { findViewById<ImageView>(R.id.iv_left) }
-
-    private val btnRight by lazy { findViewById<Button>(R.id.btn_right) }
-    private val ivRight by lazy { findViewById<ImageView>(R.id.iv_right) }
-
-
-    private val btnFade by lazy { findViewById<Button>(R.id.btn_fade) }
-    private val ivFade by lazy { findViewById<ImageView>(R.id.iv_fade) }
-
+    lateinit var binding: ActivityAnimBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_anim)
+        setContentView(ActivityAnimBinding.inflate(layoutInflater).apply {
+            binding = this
+        }.root)
 
         sampleTopHide()
 
@@ -38,12 +27,17 @@ class AnimActivity : AppCompatActivity() {
 
         sampleFade()
 
+        sampleRotate45()
+
+        sampleRotate90()
+
+        sampleScale()
 
     }
 
 
     // 向上隱藏 Sample
-    private fun sampleTopHide() {
+    private fun sampleTopHide() = binding.run {
         btnTop.run {
             clickWithTrigger {
 
@@ -64,8 +58,8 @@ class AnimActivity : AppCompatActivity() {
     }
 
     // 向下隱藏 Sample
-    private fun sampleBottomHide() {
-        btnBtom.run {
+    private fun sampleBottomHide() = binding.run {
+        btnBottom.run {
             clickWithTrigger {
 
                 loge("btnBtom 觸發點擊！")
@@ -73,17 +67,17 @@ class AnimActivity : AppCompatActivity() {
 
                 if (!isSelected) {
                     text = "向下隱藏"
-                    ivBtom.anim2TopShow()
+                    ivBottom.anim2TopShow()
                 } else {
                     text = "向上出現"
-                    ivBtom.anim2BottomHide()
+                    ivBottom.anim2BottomHide()
                 }
             }
         }
     }
 
     // 向左隱藏 Sample
-    private fun sampleLeftHide() {
+    private fun sampleLeftHide() = binding.run {
         btnLeft.run {
             clickWithTrigger {
                 isSelected = !isSelected
@@ -101,7 +95,7 @@ class AnimActivity : AppCompatActivity() {
     }
 
     // 向右隱藏 Sample
-    private fun sampleRightHide() {
+    private fun sampleRightHide() = binding.run {
         btnRight.run {
             clickWithTrigger {
                 isSelected = !isSelected
@@ -118,7 +112,7 @@ class AnimActivity : AppCompatActivity() {
     }
 
     // 淡出淡入 Sample
-    private fun sampleFade() {
+    private fun sampleFade() = binding.run {
         btnFade.run {
             clickWithTrigger {
                 isSelected = !isSelected
@@ -132,6 +126,53 @@ class AnimActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // 旋轉45度 Sample
+    private fun sampleRotate45() = binding.run {
+        var nowDegree = 0f
+        btnRotate45.run {
+            clickWithTrigger {
+                loge("btnRotate45 觸發點擊！")
+                ivRotate45.animRotate(nowDegree, nowDegree + 45f)
+                nowDegree += 45f
+            }
+        }
+    }
+
+    // 旋轉90度 Sample
+    private fun sampleRotate90() = binding.run {
+        var nowDegree = 0f
+        btnRotate90.run {
+            clickWithTrigger {
+                loge("btnRotate90 觸發點擊！")
+                ivRotate90.animRotate(nowDegree, nowDegree + 90f)
+                nowDegree += 90f
+            }
+        }
+    }
+
+
+    // 中心比例縮放 Sample
+    private fun sampleScale() = binding.run {
+        var nowScale = 1f
+
+        // 放大
+        btnScaleUp.clickWithTrigger {
+            ivScale.animScale(nowScale, nowScale * 1.5f)
+            nowScale *= 1.5f
+            tvScale.text = "當前倍率：${nowScale.format("#.#")}"
+            loge("縮放完畢的倍率=>${nowScale}")
+        }
+
+        // 縮小
+        btnScaleDown.clickWithTrigger {
+            ivScale.animScale(nowScale, nowScale * 0.5f)
+            nowScale *= 0.5f
+            tvScale.text = "當前倍率：${nowScale.format("#.#")}"
+            loge("縮放完畢的倍率=>${nowScale}")
+        }
+
     }
 }
 

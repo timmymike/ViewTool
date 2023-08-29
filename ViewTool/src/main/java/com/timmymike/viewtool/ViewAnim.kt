@@ -2,10 +2,7 @@ package com.timmymike.viewtool
 
 import android.animation.*
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
-import android.view.animation.TranslateAnimation
+import android.view.animation.*
 import android.widget.ImageView
 import androidx.core.view.isVisible
 
@@ -68,66 +65,43 @@ private fun createDropAnimator(v: View, start: Int, end: Int): ValueAnimator {
     return animator
 }
 
-fun rotateImage(imageView: ImageView, fromDegrees: Float, toDegrees: Float, imageResource: Int) {
-    val pivotX = imageView.width / 2f
-    val pivotY = imageView.height / 2f
-    imageView.setImageResource(imageResource)
+/**
+ * 旋轉動畫
+ */
+fun View.animRotate(fromDegree: Float, toDegree: Float, duration: Long = 300L, needExecute: Boolean = true): Animation {
     //旋转动画效果   参数值 旋转的开始角度  旋转的结束角度  pivotX x轴伸缩值
-    val animation = RotateAnimation(
-        fromDegrees, toDegrees,
-        pivotX, pivotY
-    )
-    //该方法用于设置动画的持续时间，以毫秒为单位
-    animation.duration = 300
-    //设置重复次数
-    //animation.setRepeatCount(int repeatCount);
-    //动画终止时停留在最后一帧
-    animation.fillAfter = true
-    //启动动画
-    imageView.startAnimation(animation)
+    return RotateAnimation(
+        fromDegree, toDegree,
+        this.width / 2f, this.height / 2f
+    ).apply {
+        //该方法用于设置动画的持续时间，以毫秒为单位
+        this.duration = duration
+        //设置重复次数
+        //动画终止时停留在最后一帧
+        fillAfter = true
+        //启动动画
+        if (needExecute)
+            startAnimation(this)
+    }
 }
 
 /**
- * @param flag  1：朝上
- */
-fun rotateArrow(arrow: ImageView, flag: Boolean) {
-    val pivotX = arrow.width / 2f
-    val pivotY = arrow.height / 2f
-    val fromDegrees: Float
-    val toDegrees: Float
-    // flag为true则向上
-    if (flag) {
-        fromDegrees = 180f
-        toDegrees = 360f
-    } else {
-        fromDegrees = 0f
-        toDegrees = 180f
-    }
-    //旋转动画效果   参数值 旋转的开始角度  旋转的结束角度  pivotX x轴伸缩值
-    val animation = RotateAnimation(
-        fromDegrees, toDegrees,
-        pivotX, pivotY
-    )
-    //该方法用于设置动画的持续时间，以毫秒为单位
-    animation.duration = 300
-    //设置重复次数
-    //animation.setRepeatCount(int repeatCount);
-    //动画终止时停留在最后一帧
-    animation.fillAfter = true
-    //启动动画
-    arrow.startAnimation(animation)
-}
+ * 縮放動畫
+ * */
+fun View.animScale(fromScale: Float, toScale: Float, duration: Long = 300L, needExecute: Boolean = true): Animation {
+    return ScaleAnimation(
+        fromScale, toScale,
+        fromScale, toScale,
+        Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
+        Animation.RELATIVE_TO_SELF, 0.5f
+    ).apply {
+        fillAfter = true
+        this.duration = duration
 
-fun animImageView(mImageView: ImageView?) {
-    //图片动画
-    val toScale = 0.2f
-    val propertyValuesHolderX = PropertyValuesHolder.ofFloat("scaleX", 1f, toScale, 1f)
-    val propertyValuesHolderY = PropertyValuesHolder.ofFloat("scaleY", 1f, toScale, 1f)
-    val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
-        mImageView,
-        propertyValuesHolderX, propertyValuesHolderY
-    )
-    objectAnimator.start()
+        if(needExecute)
+            this@animScale.startAnimation(this)
+
+    }
 }
 
 //向右出現
