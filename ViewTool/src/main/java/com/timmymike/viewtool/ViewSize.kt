@@ -30,6 +30,8 @@ val Number.spToAutoWidth
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  * @return dp根據裝置動態計算 回傳pixel
+ * 使用範例：
+ * 100.spToPx
  */
 val Number.spToPx
     get() =
@@ -48,6 +50,8 @@ val Number.pxToSp
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  * @return dp根據裝置動態計算 回傳pixel
+ * 使用範例：
+ * 100.dpToPx
  */
 val Number.dpToPx
     get() =

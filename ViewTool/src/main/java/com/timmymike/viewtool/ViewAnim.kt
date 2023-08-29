@@ -131,95 +131,138 @@ fun animImageView(mImageView: ImageView?) {
     objectAnimator.start()
 }
 
-fun showLeft2Right(view: View) {
-    view.visibility = View.VISIBLE
+fun View.animLeft2RightShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null):Animation {
     val mShowAction = TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, -1.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-        0.0f, Animation.RELATIVE_TO_SELF, 0.0f
-    )
-    mShowAction.repeatMode = Animation.REVERSE
-    mShowAction.duration = 150
-    view.startAnimation(mShowAction)
+        Animation.RELATIVE_TO_SELF, -1f,
+        Animation.RELATIVE_TO_SELF, 0.0f,
+        Animation.RELATIVE_TO_SELF, 0.0f,
+        Animation.RELATIVE_TO_SELF, 0.0f
+    ).apply{
+        fillAfter = true
+    }
+//    mShowAction.repeatMode = Animation.REVERSE
+    mShowAction.duration = duration
+    mShowAction.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation) {}
+        override fun onAnimationEnd(animation: Animation) {
+            this@animLeft2RightShow.isVisible = true
+//            this@animLeft2RightShow.pivotX = 0f
+            afterAction?.invoke(this@animLeft2RightShow)
+        }
+
+        override fun onAnimationRepeat(animation: Animation) {}
+    })
+
+    if (needExecute)
+        this.startAnimation(mShowAction)
+
+    return mShowAction
 }
 
-fun hideRight2Left(view: View) {
-    view.visibility = View.GONE
-    val mShowAction = TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF,
-        0.0f, Animation.RELATIVE_TO_SELF, 0.0f
-    )
-    mShowAction.repeatMode = Animation.REVERSE
-    mShowAction.duration = 150
-    view.startAnimation(mShowAction)
+fun View.animRight2LeftHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null):Animation {
+    val mHideAction = TranslateAnimation(
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, -1f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f
+    ).apply{
+        fillAfter = true
+    }
+    mHideAction.duration = duration
+    mHideAction.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation) {}
+        override fun onAnimationEnd(animation: Animation) {
+            this@animRight2LeftHide.isVisible = false
+//            this@animRight2LeftHide.pivotX = -1f
+            afterAction?.invoke(this@animRight2LeftHide)
+        }
+
+        override fun onAnimationRepeat(animation: Animation) {}
+    })
+
+    if (needExecute)
+        this.startAnimation(mHideAction)
+
+    return mHideAction
 }
 
-fun View.animBottom2TopShow() {
+fun View.animBottom2TopShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null) :Animation{
     val mShowAction = TranslateAnimation(
         Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-        1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+        Animation.RELATIVE_TO_SELF, 0.0f,
+        Animation.RELATIVE_TO_SELF, 1.0f,
+        Animation.RELATIVE_TO_SELF, 0.0f
     )
     mShowAction.repeatMode = Animation.REVERSE
-    mShowAction.duration = 300
+    mShowAction.duration = duration
     this.visibility = View.INVISIBLE
     mShowAction.setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
             this@animBottom2TopShow.visibility = View.VISIBLE
+            afterAction?.invoke(this@animBottom2TopShow)
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
     })
-    this.startAnimation(mShowAction)
+
+    if (needExecute)
+        this.startAnimation(mShowAction)
+
+    return mShowAction
 }
 
-fun View.animTop2BottomHidden() {
-    if (this.visibility == View.GONE) return
+fun View.animTop2BottomHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
     val mHiddenAction = TranslateAnimation(
-        Animation.RELATIVE_TO_SELF,
-        0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-        1.0f
+        Animation.RELATIVE_TO_SELF, 0.0f,
+        Animation.RELATIVE_TO_SELF, 0.0f,
+        Animation.RELATIVE_TO_SELF, 0.0f,
+        Animation.RELATIVE_TO_SELF, 1.0f
     )
-    mHiddenAction.duration = 300
+    mHiddenAction.duration = duration
     mHiddenAction.setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
-            this@animTop2BottomHidden.isVisible = false
+            this@animTop2BottomHide.isVisible = false
+            afterAction?.invoke(this@animTop2BottomHide)
         }
+
         override fun onAnimationRepeat(animation: Animation) {}
     })
-    this.startAnimation(mHiddenAction)
+
+    if (needExecute)
+        this.startAnimation(mHiddenAction)
+
+    return mHiddenAction
 }
 
-fun View.animAlphaChange(startAlpha: Float, endAlpha: Float, duration: Long, afterAction: (() -> Unit)? = null) {
+fun View.animAlphaChange(startAlpha: Float, endAlpha: Float, needExecute: Boolean = true, duration: Long = 300L, afterAction: ((View) -> Unit)? = null): Animation {
     val animation: Animation = AlphaAnimation(startAlpha, endAlpha).apply {
         setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {}
             override fun onAnimationEnd(animation: Animation) {
-                afterAction?.invoke()
+                afterAction?.invoke(this@animAlphaChange)
             }
+
             override fun onAnimationRepeat(animation: Animation) {}
         })
         this.duration = duration
     }
-    this.startAnimation(animation)
+    if (needExecute)
+        this.startAnimation(animation)
+
+    return animation
 }
 
-fun View.fadeIn(duration: Long = 1000L) {
-    this.animAlphaChange(0f, 1f, duration) {
-        this.isEnabled = true
-        this.isVisible = true
+fun View.fadeIn(duration: Long = 300L, needExecute: Boolean = true) =
+    this.animAlphaChange(0f, 1f, needExecute, duration) {
+        it.isEnabled = true
+        it.isVisible = true
     }
-}
 
-fun View.fadeOut(duration: Long = 1000L) {
-    if (this.visibility != View.VISIBLE) return
-    this.animAlphaChange(1f, 0f, duration) {
-        this.isEnabled = false
-        this.isVisible = false
+fun View.fadeOut(duration: Long = 300L, needExecute: Boolean = true) =
+    this.animAlphaChange(1f, 0f, needExecute, duration) {
+        it.isEnabled = false
+        it.isVisible = false
     }
-}
 
