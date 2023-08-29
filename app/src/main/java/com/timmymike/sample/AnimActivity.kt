@@ -8,27 +8,58 @@ import com.timmymike.viewtool.*
 
 class AnimActivity : AppCompatActivity() {
 
-    private val btnTopBtom: Button by lazy { findViewById<Button>(R.id.btn_top_bottom) }
-    private val ivTopBtom: ImageView by lazy { findViewById<ImageView>(R.id.iv_top_bottom) }
+    private val btnTop by lazy { findViewById<Button>(R.id.btn_top) }
+    private val ivTop by lazy { findViewById<ImageView>(R.id.iv_top) }
 
-    val btnRightLeft by lazy { findViewById<Button>(R.id.btn_right_left) }
-    val ivRightLeft by lazy { findViewById<ImageView>(R.id.iv_right_left) }
+    private val btnBtom by lazy { findViewById<Button>(R.id.btn_bottom) }
+    private val ivBtom by lazy { findViewById<ImageView>(R.id.iv_bottom) }
 
+    private val btnLeft by lazy { findViewById<Button>(R.id.btn_left) }
+    private val ivLeft by lazy { findViewById<ImageView>(R.id.iv_left) }
+
+    private val btnRight by lazy { findViewById<Button>(R.id.btn_right) }
+    private val ivRight by lazy { findViewById<ImageView>(R.id.iv_right) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_anim)
 
+        sampleTopHide()
+
         sampleBottomHide()
 
         sampleLeftHide()
+
+        sampleRightHide()
 
 
     }
 
 
+    // 向上隱藏 Sample
+    private fun sampleTopHide() {
+        btnTop.run {
+            clickWithTrigger {
+
+                loge("btnTopBtom 觸發點擊！")
+                isSelected = !isSelected
+
+                if (!isSelected) {
+                    text = "向上隱藏"
+                    ivTop.anim2BottomShow()
+                } else {
+                    text = "向下出現"
+                    ivTop.anim2TopHide()
+                }
+            }
+        }
+
+
+    }
+
+    // 向下隱藏 Sample
     private fun sampleBottomHide() {
-        btnTopBtom.run {
+        btnBtom.run {
             clickWithTrigger {
 
                 loge("btnTopBtom 觸發點擊！")
@@ -36,30 +67,50 @@ class AnimActivity : AppCompatActivity() {
 
                 if (!isSelected) {
                     text = "向下隱藏"
-                    ivTopBtom.animBottom2TopShow()
+                    ivBtom.anim2TopShow()
                 } else {
                     text = "向上出現"
-                    ivTopBtom.animTop2BottomHide()
+                    ivBtom.anim2BottomHide()
                 }
             }
         }
     }
 
+    // 向左隱藏 Sample
     private fun sampleLeftHide() {
-        btnRightLeft.run {
+        btnLeft.run {
             clickWithTrigger {
                 isSelected = !isSelected
                 loge("btnRightLeft 觸發點擊！")
                 if (!isSelected) {
                     text = "向左隱藏"
-                    ivRightLeft.animLeft2RightShow()
+                    ivLeft.anim2RightShow()
                 } else {
                     text = "向右出現"
-                    ivRightLeft.animRight2LeftHide()
+                    ivLeft.anim2LeftHide()
                 }
             }
 
         }
+    }
+
+    // 向右隱藏 Sample
+    private fun sampleRightHide() {
+        btnRight.run {
+            clickWithTrigger {
+                isSelected = !isSelected
+                loge("btnRightLeft 觸發點擊！")
+                if (!isSelected) {
+                    text = "向右隱藏"
+                    ivRight.anim2LeftShow()
+                } else {
+                    text = "向左出現"
+                    ivRight.anim2RightHide()
+                }
+            }
+
+        }
+
     }
 
 }

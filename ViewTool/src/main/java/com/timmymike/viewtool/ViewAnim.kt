@@ -88,7 +88,6 @@ fun rotateImage(imageView: ImageView, fromDegrees: Float, toDegrees: Float, imag
 }
 
 /**
- * @param arrow
  * @param flag  1：朝上
  */
 fun rotateArrow(arrow: ImageView, flag: Boolean) {
@@ -122,8 +121,8 @@ fun rotateArrow(arrow: ImageView, flag: Boolean) {
 fun animImageView(mImageView: ImageView?) {
     //图片动画
     val toScale = 0.2f
-    val propertyValuesHolderX = PropertyValuesHolder.ofFloat("scaleX", 1.0f, toScale, 1.0f)
-    val propertyValuesHolderY = PropertyValuesHolder.ofFloat("scaleY", 1.0f, toScale, 1.0f)
+    val propertyValuesHolderX = PropertyValuesHolder.ofFloat("scaleX", 1f, toScale, 1f)
+    val propertyValuesHolderY = PropertyValuesHolder.ofFloat("scaleY", 1f, toScale, 1f)
     val objectAnimator = ObjectAnimator.ofPropertyValuesHolder(
         mImageView,
         propertyValuesHolderX, propertyValuesHolderY
@@ -131,100 +130,203 @@ fun animImageView(mImageView: ImageView?) {
     objectAnimator.start()
 }
 
-fun View.animLeft2RightShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null):Animation {
-    val mShowAction = TranslateAnimation(
+//向右出現
+fun View.anim2RightShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
         Animation.RELATIVE_TO_SELF, -1f,
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f
-    ).apply{
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f
+    ).apply {
         fillAfter = true
+
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2RightShow.isVisible = true
+                afterAction?.invoke(this@anim2RightShow)
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
+        if (needExecute)
+            this@anim2RightShow.startAnimation(this)
     }
-//    mShowAction.repeatMode = Animation.REVERSE
-    mShowAction.duration = duration
-    mShowAction.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation) {}
-        override fun onAnimationEnd(animation: Animation) {
-            this@animLeft2RightShow.isVisible = true
-//            this@animLeft2RightShow.pivotX = 0f
-            afterAction?.invoke(this@animLeft2RightShow)
-        }
-
-        override fun onAnimationRepeat(animation: Animation) {}
-    })
-
-    if (needExecute)
-        this.startAnimation(mShowAction)
-
-    return mShowAction
 }
 
-fun View.animRight2LeftHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null):Animation {
-    val mHideAction = TranslateAnimation(
+// 向左隱藏
+fun View.anim2LeftHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
         Animation.RELATIVE_TO_SELF, 0f,
         Animation.RELATIVE_TO_SELF, -1f,
         Animation.RELATIVE_TO_SELF, 0f,
         Animation.RELATIVE_TO_SELF, 0f
-    ).apply{
+    ).apply {
         fillAfter = true
+
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2LeftHide.isVisible = false
+                afterAction?.invoke(this@anim2LeftHide)
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
+        if (needExecute)
+            this@anim2LeftHide.startAnimation(this)
+
     }
-    mHideAction.duration = duration
-    mHideAction.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation) {}
-        override fun onAnimationEnd(animation: Animation) {
-            this@animRight2LeftHide.isVisible = false
-//            this@animRight2LeftHide.pivotX = -1f
-            afterAction?.invoke(this@animRight2LeftHide)
-        }
-
-        override fun onAnimationRepeat(animation: Animation) {}
-    })
-
-    if (needExecute)
-        this.startAnimation(mHideAction)
-
-    return mHideAction
 }
 
-fun View.animBottom2TopShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null) :Animation{
-    val mShowAction = TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 1.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f
-    )
-    mShowAction.repeatMode = Animation.REVERSE
-    mShowAction.duration = duration
-    this.visibility = View.INVISIBLE
-    mShowAction.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation) {}
-        override fun onAnimationEnd(animation: Animation) {
-            this@animBottom2TopShow.visibility = View.VISIBLE
-            afterAction?.invoke(this@animBottom2TopShow)
-        }
 
-        override fun onAnimationRepeat(animation: Animation) {}
-    })
+//向右隱藏
+fun View.anim2RightHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 1f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f
+    ).apply {
+        fillAfter = true
 
-    if (needExecute)
-        this.startAnimation(mShowAction)
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2RightHide.isVisible = true
+                afterAction?.invoke(this@anim2RightHide)
+            }
 
-    return mShowAction
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
+        if (needExecute)
+            this@anim2RightHide.startAnimation(this)
+    }
 }
 
-fun View.animTop2BottomHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+// 向左出現
+fun View.anim2LeftShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
+        Animation.RELATIVE_TO_SELF, 1f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f
+    ).apply {
+        fillAfter = true
+
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2LeftShow.isVisible = false
+                afterAction?.invoke(this@anim2LeftShow)
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
+        if (needExecute)
+            this@anim2LeftShow.startAnimation(this)
+
+    }
+}
+
+// 向上隱藏
+fun View.anim2TopHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, -1f
+    ).apply {
+        fillAfter = true
+
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2TopHide.isVisible = false
+                afterAction?.invoke(this@anim2TopHide)
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+
+        if (needExecute)
+            this@anim2TopHide.startAnimation(this)
+    }
+}
+
+// 向下出現
+fun View.anim2BottomShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, -1f,
+        Animation.RELATIVE_TO_SELF, 0f
+    ).apply {
+        fillAfter = true
+
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2BottomShow.isVisible = true
+                afterAction?.invoke(this@anim2BottomShow)
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        if (needExecute)
+            this@anim2BottomShow.startAnimation(this)
+    }
+}
+
+
+// 向上出現
+fun View.anim2TopShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
+    return TranslateAnimation(
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 1f,
+        Animation.RELATIVE_TO_SELF, 0f
+    ).apply {
+        repeatMode = Animation.REVERSE
+        this.duration = duration
+        setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation) {}
+            override fun onAnimationEnd(animation: Animation) {
+                this@anim2TopShow.visibility = View.VISIBLE
+                afterAction?.invoke(this@anim2TopShow)
+            }
+
+            override fun onAnimationRepeat(animation: Animation) {}
+        })
+        if (needExecute)
+            this@anim2TopShow.startAnimation(this)
+    }
+}
+
+// 向下隱藏
+fun View.anim2BottomHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
     val mHiddenAction = TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 0.0f,
-        Animation.RELATIVE_TO_SELF, 1.0f
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 0f,
+        Animation.RELATIVE_TO_SELF, 1f
     )
     mHiddenAction.duration = duration
     mHiddenAction.setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationStart(animation: Animation) {}
         override fun onAnimationEnd(animation: Animation) {
-            this@animTop2BottomHide.isVisible = false
-            afterAction?.invoke(this@animTop2BottomHide)
+            this@anim2BottomHide.isVisible = false
+            afterAction?.invoke(this@anim2BottomHide)
         }
 
         override fun onAnimationRepeat(animation: Animation) {}
