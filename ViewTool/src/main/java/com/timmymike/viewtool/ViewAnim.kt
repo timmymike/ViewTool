@@ -66,42 +66,76 @@ private fun createDropAnimator(v: View, start: Int, end: Int): ValueAnimator {
 }
 
 /**
- * 旋轉動畫
- */
-fun View.animRotate(fromDegree: Float, toDegree: Float, duration: Long = 300L, needExecute: Boolean = true): Animation {
-    //旋转动画效果   参数值 旋转的开始角度  旋转的结束角度  pivotX x轴伸缩值
-    return RotateAnimation(
-        fromDegree, toDegree,
-        this.width / 2f, this.height / 2f
-    ).apply {
-        //该方法用于设置动画的持续时间，以毫秒为单位
+ * 背景顏色漸變動畫(限定ImageView)
+ * */
+fun ImageView.animBgColor(fromColor:Int,toColor:Int,duration: Long= 300L,needExecute: Boolean= true):Animator{
+    return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply{
         this.duration = duration
-        //设置重复次数
-        //动画终止时停留在最后一帧
-        fillAfter = true
-        //启动动画
-        if (needExecute)
-            startAnimation(this)
+
+        addUpdateListener { animator ->
+            val animatedValue = animator.animatedValue as Int
+            setBackgroundColor(animatedValue)
+        }
+
+        if (needExecute) {
+            this.start()
+        }
     }
 }
 
+
 /**
- * 縮放動畫
+ * 顏色漸變動畫(限定ImageView)
  * */
-fun View.animScale(fromScale: Float, toScale: Float, duration: Long = 300L, needExecute: Boolean = true): Animation {
-    return ScaleAnimation(
-        fromScale, toScale,
-        fromScale, toScale,
-        Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-        Animation.RELATIVE_TO_SELF, 0.5f
-    ).apply {
-        fillAfter = true
+fun ImageView.animColor(fromColor:Int,toColor:Int,duration: Long= 300L,needExecute: Boolean= true):Animator{
+    return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply{
         this.duration = duration
 
-        if(needExecute)
-            this@animScale.startAnimation(this)
+        addUpdateListener { animator ->
+            val animatedValue = animator.animatedValue as Int
+            setColorFilter(animatedValue)
+        }
 
+        if (needExecute) {
+            this.start()
+        }
     }
+}
+
+
+/**
+ * 縮放動畫
+ */
+fun View.animScale(fromScale: Float, toScale: Float, duration: Long = 300L, needExecute: Boolean = true): Animator {
+    val scaleXHolder = PropertyValuesHolder.ofFloat(View.SCALE_X, fromScale, toScale)
+    val scaleYHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, fromScale, toScale)
+
+    val animator = ObjectAnimator.ofPropertyValuesHolder(this, scaleXHolder, scaleYHolder)
+
+    animator.duration = duration
+
+    if (needExecute) {
+        animator.start()
+    }
+
+    return animator
+}
+
+/**
+ * 旋轉動畫
+ */
+fun View.animRotate(fromDegree: Float, toDegree: Float, duration: Long = 300L, needExecute: Boolean = true): Animator {
+    val rotationHolder = PropertyValuesHolder.ofFloat(View.ROTATION, fromDegree, toDegree)
+
+    val animator = ObjectAnimator.ofPropertyValuesHolder(this, rotationHolder)
+
+    animator.duration = duration
+
+    if (needExecute) {
+        animator.start()
+    }
+
+    return animator
 }
 
 //向右出現

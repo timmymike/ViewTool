@@ -1,5 +1,6 @@
 package com.timmymike.sample
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,10 @@ class AnimActivity : AppCompatActivity() {
         sampleRotate90()
 
         sampleScale()
+
+        sampleColor()
+
+        sampleBackgroundColor()
 
     }
 
@@ -119,10 +124,10 @@ class AnimActivity : AppCompatActivity() {
                 loge("btnFade 觸發點擊！")
                 if (!isSelected) {
                     text = "淡出"
-                    ivFade.fadeIn()
+                    ivFade.fadeIn(1000L)
                 } else {
                     text = "淡入"
-                    ivFade.fadeOut()
+                    ivFade.fadeOut(1000L)
                 }
             }
         }
@@ -161,7 +166,7 @@ class AnimActivity : AppCompatActivity() {
         btnScaleUp.clickWithTrigger {
             ivScale.animScale(nowScale, nowScale * 1.5f)
             nowScale *= 1.5f
-            tvScale.text = "當前倍率：${nowScale.format("#.#")}"
+            tvScale.text = "當前倍率：${nowScale.format("0.00")}"
             loge("縮放完畢的倍率=>${nowScale}")
         }
 
@@ -169,10 +174,59 @@ class AnimActivity : AppCompatActivity() {
         btnScaleDown.clickWithTrigger {
             ivScale.animScale(nowScale, nowScale * 0.5f)
             nowScale *= 0.5f
-            tvScale.text = "當前倍率：${nowScale.format("#.#")}"
+            tvScale.text = "當前倍率：${nowScale.format("0.00")}"
             loge("縮放完畢的倍率=>${nowScale}")
         }
 
     }
+
+    // 顏色漸變 Sample
+    private fun sampleColor() = binding.run {
+        var nowColor = Color.BLACK
+        btnColorBlue.clickWithTrigger {
+            ivColor.animColor(nowColor, Color.BLUE, 1000L)
+            nowColor = Color.BLUE
+        }
+
+        btnColorRed.clickWithTrigger {
+            ivColor.animColor(nowColor, Color.RED, 1000L)
+            nowColor = Color.RED
+        }
+
+        btnColorGreen.clickWithTrigger {
+            ivColor.animColor(nowColor, Color.GREEN, 1000L)
+            nowColor = Color.GREEN
+        }
+
+        btnColorBlack.clickWithTrigger {
+            ivColor.animColor(nowColor, Color.BLACK, 1000L)
+            nowColor = Color.BLACK
+        }
+    }
+
+    // 背景顏色漸變 Sample
+    private fun sampleBackgroundColor() = binding.run {
+        var nowColor = Color.WHITE
+        btnBgBlue.clickWithTrigger {
+            ivBg.animBgColor(nowColor, Color.BLUE, 1000L)
+            nowColor = Color.BLUE
+        }
+
+        btnBgRed.clickWithTrigger {
+            ivBg.animBgColor(nowColor, Color.RED, 1000L)
+            nowColor = Color.RED
+        }
+
+        btnBgGreen.clickWithTrigger {
+            ivBg.animBgColor(nowColor, Color.GREEN, 1000L)
+            nowColor = Color.GREEN
+        }
+
+        btnBgWhite.clickWithTrigger {
+            ivBg.animBgColor(nowColor, Color.WHITE, 1000L)
+            nowColor = Color.WHITE
+        }
+    }
+
 }
 
