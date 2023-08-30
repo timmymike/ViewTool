@@ -2,22 +2,53 @@ package com.timmymike.viewtool
 
 import android.animation.*
 import android.view.View
-import android.view.animation.*
 import android.widget.ImageView
 import androidx.core.view.isVisible
 
-
+/**
+ * 複合型動畫呼叫方式(供動畫們一起執行)
+ *
+ * 使用範例：
+ *  animateGroup(
+ *      ivCompound2.animScale(1f, 0.5f, 2000L, needExecute = false),
+ *      ivCompound2.animAlpha(1f, 0.5f, needExecute = false),
+ *      ivCompound2.animRotate(90f, 0f, needExecute = false),
+ *  )
+ * */
 fun animateGroup(vararg animator: Animator) {
-    AnimatorSet().apply { playTogether(animator.toMutableSet()) }.start()
+    AnimatorSet().apply { playTogether(animator.toMutableList()) }.start()
 }
 
+/**
+ * 連續型動畫呼叫方式(供動畫們接續執行)
+ *
+ * 使用範例：
+ *  animateContinuous(
+ *      ivContinuous3.animColor(Color.BLACK,Color.RED,1000L,needExecute = false),
+ *      ivContinuous3.animRotate(0f,180f,1000L,needExecute = false),
+ *      ivContinuous3.anim2BottomHide(needExecute = false)
+ *  )
+ * */
+fun animateContinuous(vararg animator: Animator) {
+    AnimatorSet().apply { playSequentially(animator.toMutableList()) }.start()
+}
 
 /**
  * 背景顏色漸變動畫
  * */
-fun View.animBgColor(fromColor: Int, toColor: Int, duration: Long = 300L, needExecute: Boolean = true): Animator {
+fun View.animBgColor(fromColor: Int, toColor: Int, duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
     return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply {
         this.duration = duration
+
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                afterAction?.invoke(this@animBgColor)
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
 
         addUpdateListener { animator ->
             val animatedValue = animator.animatedValue as Int
@@ -34,9 +65,18 @@ fun View.animBgColor(fromColor: Int, toColor: Int, duration: Long = 300L, needEx
 /**
  * 顏色漸變動畫(限定ImageView)
  * */
-fun ImageView.animColor(fromColor: Int, toColor: Int, duration: Long = 300L, needExecute: Boolean = true): Animator {
+fun ImageView.animColor(fromColor: Int, toColor: Int, duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
     return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply {
         this.duration = duration
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                afterAction?.invoke(this@animColor)
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
 
         addUpdateListener { animator ->
             val animatedValue = animator.animatedValue as Int
@@ -53,36 +93,44 @@ fun ImageView.animColor(fromColor: Int, toColor: Int, duration: Long = 300L, nee
 /**
  * 中心縮放動畫
  */
-fun View.animScale(fromScale: Float, toScale: Float, duration: Long = 300L, needExecute: Boolean = true): Animator {
+fun View.animScale(fromScale: Float, toScale: Float, duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
     val scaleXHolder = PropertyValuesHolder.ofFloat(View.SCALE_X, fromScale, toScale)
     val scaleYHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, fromScale, toScale)
 
-    val animator = ObjectAnimator.ofPropertyValuesHolder(this, scaleXHolder, scaleYHolder)
+    return ObjectAnimator.ofPropertyValuesHolder(this, scaleXHolder, scaleYHolder).apply {
+        this.duration = duration
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                afterAction?.invoke(this@animScale)
+            }
 
-    animator.duration = duration
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
 
-    if (needExecute) {
-        animator.start()
+        if (needExecute) start()
     }
-
-    return animator
 }
 
 /**
  * 旋轉動畫
  */
-fun View.animRotate(fromDegree: Float, toDegree: Float, duration: Long = 300L, needExecute: Boolean = true): Animator {
-    val rotationHolder = PropertyValuesHolder.ofFloat(View.ROTATION, fromDegree, toDegree)
+fun View.animRotate(fromDegree: Float, toDegree: Float, duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.ROTATION, fromDegree, toDegree).apply {
+        this.duration = duration
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                afterAction?.invoke(this@animRotate)
+            }
 
-    val animator = ObjectAnimator.ofPropertyValuesHolder(this, rotationHolder)
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        if (needExecute) start()
 
-    animator.duration = duration
-
-    if (needExecute) {
-        animator.start()
     }
-
-    return animator
 }
 
 /**
@@ -118,7 +166,6 @@ fun View.anim2LeftHide(duration: Long = 300L, needExecute: Boolean = true, after
         addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
-                isVisible = false
                 afterAction?.invoke(this@anim2LeftHide)
             }
 
@@ -138,7 +185,6 @@ fun View.anim2RightHide(duration: Long = 300L, needExecute: Boolean = true, afte
         addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
-                isVisible = false
                 afterAction?.invoke(this@anim2RightHide)
             }
 
@@ -178,7 +224,6 @@ fun View.anim2TopHide(duration: Long = 300L, needExecute: Boolean = true, afterA
         addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
-                isVisible = false
                 afterAction?.invoke(this@anim2TopHide)
             }
 
@@ -238,7 +283,6 @@ fun View.anim2BottomHide(duration: Long = 300L, needExecute: Boolean = true, aft
         addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
-                isVisible = false
                 afterAction?.invoke(this@anim2BottomHide)
             }
 
@@ -258,7 +302,7 @@ fun View.animAlpha(startAlpha: Float, endAlpha: Float, needExecute: Boolean = tr
         this.duration = duration
 
         addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) { isVisible = true }
+            override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
                 afterAction?.invoke(this@animAlpha)
             }
@@ -274,16 +318,18 @@ fun View.animAlpha(startAlpha: Float, endAlpha: Float, needExecute: Boolean = tr
 /**
  * 封裝為全部出現的透明度效果
  * */
-fun View.fadeIn(duration: Long = 300L, needExecute: Boolean = true) =
+fun View.fadeIn(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null) =
     this.animAlpha(0f, 1f, needExecute, duration) {
         it.isEnabled = true
+        afterAction?.invoke(this@fadeIn)
     }
 
 /**
  * 封裝為全部消失的透明度效果
  * */
-fun View.fadeOut(duration: Long = 300L, needExecute: Boolean = true) =
+fun View.fadeOut(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null) =
     this.animAlpha(1f, 0f, needExecute, duration) {
         it.isEnabled = false
+        afterAction?.invoke(this@fadeOut)
     }
 

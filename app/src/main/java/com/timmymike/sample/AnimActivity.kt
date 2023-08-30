@@ -2,6 +2,7 @@ package com.timmymike.sample
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.timmymike.logtool.format
 import com.timmymike.logtool.loge
@@ -17,11 +18,11 @@ class AnimActivity : AppCompatActivity() {
             binding = this
         }.root)
 
-        singleExecute()
+        singleExecute()      // 單一執行
 
-        compoundExecute()
+        compoundExecute()    // 複合執行
 
-        continuousExecute()
+        continuousExecute()  // 連續執行
 
     }
 
@@ -236,15 +237,15 @@ class AnimActivity : AppCompatActivity() {
 
     // 複合執行
     private fun compoundExecute() {
-        compoundExecute1()
+        compoundSample1()
 
-        compoundExecute2()
+        compoundSample2()
 
-        compoundExecute3()
+        compoundSample3()
     }
 
-    // 範例1：旋轉+變色
-    private fun compoundExecute1() = binding.run {
+    // 複合執行範例1：旋轉+變色
+    private fun compoundSample1() = binding.run {
         btnCompound1.run {
             clickWithTrigger {
                 isSelected = isSelected.not()
@@ -265,8 +266,8 @@ class AnimActivity : AppCompatActivity() {
         }
     }
 
-    // 範例2：縮小+淡出
-    private fun compoundExecute2() = binding.run {
+    // 複合執行範例2：縮小+淡出
+    private fun compoundSample2() = binding.run {
         btnCompound2.run {
             clickWithTrigger {
                 isSelected = isSelected.not()
@@ -287,15 +288,15 @@ class AnimActivity : AppCompatActivity() {
         }
     }
 
-    // 範例3：向右隱藏+旋轉
-    private fun compoundExecute3() = binding.run {
+    // 複合執行範例3：向右隱藏+旋轉
+    private fun compoundSample3() = binding.run {
         btnCompound3.run {
             clickWithTrigger {
                 isSelected = isSelected.not()
                 text = if (!isSelected) {
                     animateGroup(
                         ivCompound3.anim2LeftShow(needExecute = false),
-                        ivCompound3.animRotate(270f, 90f,2000L, needExecute = false)
+                        ivCompound3.animRotate(270f, 90f, 2000L, needExecute = false)
                     )
                     "向右隱藏+旋轉"
                 } else {
@@ -309,11 +310,93 @@ class AnimActivity : AppCompatActivity() {
         }
     }
 
-
+    // 連續執行
     private fun continuousExecute() {
+
+        continuousSample1()
+
+        continuousSample2()
+
+        continuousSample3()
+    }
+
+    // 連續執行範例1：旋轉→變色→向上隱藏 // 巢狀式呼叫
+    private fun continuousSample1() = binding.run {
+        btnContinuous1.run {
+            clickWithTrigger {
+                isSelected = !isSelected
+                text = if (!isSelected) {
+                    ivContinuous1.anim2BottomShow {
+                        (it as? ImageView)?.animColor(Color.BLUE, Color.BLACK) {
+                            it.animRotate(180f, 0f)
+                        }
+                    }
+                    "旋轉→變色→向上隱藏"
+                } else {
+                    ivContinuous1.animRotate(0f, 180f) {
+                        (it as? ImageView)?.animColor(Color.BLACK, Color.BLUE) {
+                            it.anim2TopHide()
+                        }
+                    }
+                    "變回去"
+                }
+            }
+        }
     }
 
 
+    // 連續執行範例2：縮小+旋轉+背景變綠+淡出 // 巢狀式呼叫
+    private fun continuousSample2() = binding.run {
+        btnContinuous2.run {
+            clickWithTrigger {
+                isSelected = !isSelected
+                text = if (!isSelected) {
+                    ivContinuous2.fadeIn (1000L){
+                        it.animBgColor(Color.GREEN, Color.WHITE,1000L) {
+                            it.animRotate(45f, 0f) {
+                                it.animScale(0.5f, 1f)
+                            }
+                        }
+                    }
+                    "縮小→旋轉→背景變綠→淡出"
+                } else {
+                    ivContinuous2.animScale(1f, 0.5f) {
+                        it.animRotate(0f, 45f) {
+                            it.animBgColor(Color.WHITE, Color.GREEN,1000L) {
+                                it.fadeOut(1000L)
+                            }
+                        }
+                    }
+                    "變回去"
+                }
+            }
+        }
+    }
+
+    // 連續執行範例3：顏色變紅+旋轉+向下隱藏 // Continuous方法呼叫
+    private fun continuousSample3() =binding.run{
+        btnContinuous3.run{
+            clickWithTrigger {
+                isSelected = !isSelected
+                text = if(!isSelected){
+                    animateContinuous(
+                        ivContinuous3.animRotate(180f,0f,0L,needExecute = false),
+                        ivContinuous3.anim2TopShow(needExecute = false),
+                        ivContinuous3.animColor(Color.RED,Color.BLACK,needExecute = false),
+                    )
+
+                    "顏色變紅+旋轉+向下隱藏"
+                }else{
+                    animateContinuous(
+                        ivContinuous3.animColor(Color.BLACK,Color.RED,1000L,needExecute = false),
+                        ivContinuous3.animRotate(0f,180f,1000L,needExecute = false),
+                        ivContinuous3.anim2BottomHide(needExecute = false)
+                    )
+                    "變回去"
+                }
+            }
+        }
+    }
 
 }
 
