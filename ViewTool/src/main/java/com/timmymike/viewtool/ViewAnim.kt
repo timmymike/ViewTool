@@ -6,70 +6,17 @@ import android.view.animation.*
 import android.widget.ImageView
 import androidx.core.view.isVisible
 
-fun animateOpen(v: View, startHeight: Int, mHiddenViewMeasuredHeight: Int) {
-    v.visibility = View.VISIBLE
-    val animator = createDropAnimator(
-        v, startHeight,
-        mHiddenViewMeasuredHeight
-    )
-    animator.start()
+
+fun animateGroup(vararg animator: Animator) {
+    AnimatorSet().apply { playTogether(animator.toMutableSet()) }.start()
 }
 
-fun animateOpen(v: View, mHiddenViewMeasuredHeight: Int) {
-    v.visibility = View.VISIBLE
-    val animator = createDropAnimator(
-        v, 0,
-        mHiddenViewMeasuredHeight
-    )
-    animator.start()
-}
-
-interface IAnimateEnd {
-    fun onEnd()
-}
-
-fun animateOpen(v: View, mHiddenViewMeasuredHeight: Int, iAnimateEnd: IAnimateEnd) {
-    val animator = createDropAnimator(
-        v, 0,
-        mHiddenViewMeasuredHeight
-    )
-    animator.start()
-    animator.addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator) {
-            super.onAnimationEnd(animation)
-            iAnimateEnd.onEnd()
-        }
-    })
-    v.visibility = View.VISIBLE
-}
-
-fun animateClose(view: View) {
-    val origHeight = view.height
-    val animator = createDropAnimator(view, origHeight, 0)
-    animator.addListener(object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator) {
-            view.visibility = View.GONE
-        }
-    })
-    animator.start()
-}
-
-private fun createDropAnimator(v: View, start: Int, end: Int): ValueAnimator {
-    val animator = ValueAnimator.ofInt(start, end)
-    animator.addUpdateListener { arg0: ValueAnimator ->
-        val value = arg0.animatedValue as Int
-        val layoutParams = v.layoutParams
-        layoutParams.height = value
-        v.layoutParams = layoutParams
-    }
-    return animator
-}
 
 /**
- * 背景顏色漸變動畫(限定ImageView)
+ * 背景顏色漸變動畫
  * */
-fun ImageView.animBgColor(fromColor:Int,toColor:Int,duration: Long= 300L,needExecute: Boolean= true):Animator{
-    return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply{
+fun View.animBgColor(fromColor: Int, toColor: Int, duration: Long = 300L, needExecute: Boolean = true): Animator {
+    return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply {
         this.duration = duration
 
         addUpdateListener { animator ->
@@ -87,8 +34,8 @@ fun ImageView.animBgColor(fromColor:Int,toColor:Int,duration: Long= 300L,needExe
 /**
  * 顏色漸變動畫(限定ImageView)
  * */
-fun ImageView.animColor(fromColor:Int,toColor:Int,duration: Long= 300L,needExecute: Boolean= true):Animator{
-    return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply{
+fun ImageView.animColor(fromColor: Int, toColor: Int, duration: Long = 300L, needExecute: Boolean = true): Animator {
+    return ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply {
         this.duration = duration
 
         addUpdateListener { animator ->
@@ -104,7 +51,7 @@ fun ImageView.animColor(fromColor:Int,toColor:Int,duration: Long= 300L,needExecu
 
 
 /**
- * 縮放動畫
+ * 中心縮放動畫
  */
 fun View.animScale(fromScale: Float, toScale: Float, duration: Long = 300L, needExecute: Boolean = true): Animator {
     val scaleXHolder = PropertyValuesHolder.ofFloat(View.SCALE_X, fromScale, toScale)
@@ -138,241 +85,205 @@ fun View.animRotate(fromDegree: Float, toDegree: Float, duration: Long = 300L, n
     return animator
 }
 
-//向右出現
-fun View.anim2RightShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, -1f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f
-    ).apply {
-        fillAfter = true
+/**
+ * 向右出現
+ * */
+fun View.anim2RightShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_X, -width.toFloat(), 0f).apply {
+        isVisible = true // 要先設定為可見，才可以有「滑出的效果」
 
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2RightShow.isVisible = true
+
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 afterAction?.invoke(this@anim2RightShow)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
 
-        if (needExecute)
-            this@anim2RightShow.startAnimation(this)
+        if (needExecute) start()
     }
 }
 
-// 向左隱藏
-fun View.anim2LeftHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, -1f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f
-    ).apply {
-        fillAfter = true
-
+/**
+ * 向左隱藏
+ * */
+fun View.anim2LeftHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_X, 0f, -width.toFloat()).apply {
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2LeftHide.isVisible = false
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                isVisible = false
                 afterAction?.invoke(this@anim2LeftHide)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-
-        if (needExecute)
-            this@anim2LeftHide.startAnimation(this)
-
+        if (needExecute) start()
     }
 }
 
-
-//向右隱藏
-fun View.anim2RightHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 1f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f
-    ).apply {
-        fillAfter = true
-
+/**
+ * 向右隱藏
+ * */
+fun View.anim2RightHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_X, 0f, width.toFloat()).apply {
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2RightHide.isVisible = true
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                isVisible = false
                 afterAction?.invoke(this@anim2RightHide)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-
-        if (needExecute)
-            this@anim2RightHide.startAnimation(this)
+        if (needExecute) start()
     }
 }
 
-// 向左出現
-fun View.anim2LeftShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 1f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f
-    ).apply {
-        fillAfter = true
-
+/**
+ * 向左出现
+ * */
+fun View.anim2LeftShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_X, width.toFloat(), 0f).apply {
+        isVisible = true // 要先設定為可見，才可以有「滑出的效果」
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2LeftShow.isVisible = false
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 afterAction?.invoke(this@anim2LeftShow)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-
-        if (needExecute)
-            this@anim2LeftShow.startAnimation(this)
-
+        if (needExecute) start()
     }
 }
 
-// 向上隱藏
-fun View.anim2TopHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, -1f
-    ).apply {
-        fillAfter = true
-
+/**
+ * 向上隱藏
+ * */
+fun View.anim2TopHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, 0f, -height.toFloat()).apply {
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2TopHide.isVisible = false
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                isVisible = false
                 afterAction?.invoke(this@anim2TopHide)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-
-        if (needExecute)
-            this@anim2TopHide.startAnimation(this)
+        if (needExecute) start()
     }
 }
 
-// 向下出現
-fun View.anim2BottomShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, -1f,
-        Animation.RELATIVE_TO_SELF, 0f
-    ).apply {
-        fillAfter = true
-
+/**
+ * 向下出現
+ * */
+fun View.anim2BottomShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, -height.toFloat(), 0f).apply {
+        isVisible = true // 要先設定為可見，才可以有「滑出的效果」
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2BottomShow.isVisible = true
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 afterAction?.invoke(this@anim2BottomShow)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-        if (needExecute)
-            this@anim2BottomShow.startAnimation(this)
+        if (needExecute) start()
     }
 }
 
-
-// 向上出現
-fun View.anim2TopShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    return TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 1f,
-        Animation.RELATIVE_TO_SELF, 0f
-    ).apply {
-        repeatMode = Animation.REVERSE
+/**
+ * 向上出現
+ * */
+fun View.anim2TopShow(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, height.toFloat(), 0f).apply {
+        isVisible = true  // 要先設定為可見，才可以有「滑出的效果」
         this.duration = duration
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                this@anim2TopShow.visibility = View.VISIBLE
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
                 afterAction?.invoke(this@anim2TopShow)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-        if (needExecute)
-            this@anim2TopShow.startAnimation(this)
+        if (needExecute) start()
     }
 }
 
-// 向下隱藏
-fun View.anim2BottomHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animation {
-    val mHiddenAction = TranslateAnimation(
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 0f,
-        Animation.RELATIVE_TO_SELF, 1f
-    )
-    mHiddenAction.duration = duration
-    mHiddenAction.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation) {}
-        override fun onAnimationEnd(animation: Animation) {
-            this@anim2BottomHide.isVisible = false
-            afterAction?.invoke(this@anim2BottomHide)
-        }
-
-        override fun onAnimationRepeat(animation: Animation) {}
-    })
-
-    if (needExecute)
-        this.startAnimation(mHiddenAction)
-
-    return mHiddenAction
-}
-
-fun View.animAlphaChange(startAlpha: Float, endAlpha: Float, needExecute: Boolean = true, duration: Long = 300L, afterAction: ((View) -> Unit)? = null): Animation {
-    val animation: Animation = AlphaAnimation(startAlpha, endAlpha).apply {
-        setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                afterAction?.invoke(this@animAlphaChange)
+/**
+ * 向下隱藏
+ * */
+fun View.anim2BottomHide(duration: Long = 300L, needExecute: Boolean = true, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, 0f, height.toFloat()).apply {
+        this.duration = duration
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                isVisible = false
+                afterAction?.invoke(this@anim2BottomHide)
             }
 
-            override fun onAnimationRepeat(animation: Animation) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
         })
-        this.duration = duration
+        if (needExecute) start()
     }
-    if (needExecute)
-        this.startAnimation(animation)
-
-    return animation
 }
 
+
+/**
+ * 透明度效果動畫
+ * */
+fun View.animAlpha(startAlpha: Float, endAlpha: Float, needExecute: Boolean = true, duration: Long = 300L, afterAction: ((View) -> Unit)? = null): Animator {
+    return ObjectAnimator.ofFloat(this, View.ALPHA, startAlpha, endAlpha).apply {
+        this.duration = duration
+
+        addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) { isVisible = true }
+            override fun onAnimationEnd(animation: Animator) {
+                afterAction?.invoke(this@animAlpha)
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+
+        if (needExecute) start()
+    }
+}
+
+/**
+ * 封裝為全部出現的透明度效果
+ * */
 fun View.fadeIn(duration: Long = 300L, needExecute: Boolean = true) =
-    this.animAlphaChange(0f, 1f, needExecute, duration) {
+    this.animAlpha(0f, 1f, needExecute, duration) {
         it.isEnabled = true
-        it.isVisible = true
     }
 
+/**
+ * 封裝為全部消失的透明度效果
+ * */
 fun View.fadeOut(duration: Long = 300L, needExecute: Boolean = true) =
-    this.animAlphaChange(1f, 0f, needExecute, duration) {
+    this.animAlpha(1f, 0f, needExecute, duration) {
         it.isEnabled = false
-        it.isVisible = false
     }
 

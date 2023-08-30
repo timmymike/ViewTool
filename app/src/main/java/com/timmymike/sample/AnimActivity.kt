@@ -2,7 +2,6 @@ package com.timmymike.sample
 
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.timmymike.logtool.format
 import com.timmymike.logtool.loge
@@ -18,6 +17,16 @@ class AnimActivity : AppCompatActivity() {
             binding = this
         }.root)
 
+        singleExecute()
+
+        compoundExecute()
+
+        continuousExecute()
+
+    }
+
+    // 單一執行
+    private fun singleExecute() {
         sampleTopHide()
 
         sampleBottomHide()
@@ -37,7 +46,6 @@ class AnimActivity : AppCompatActivity() {
         sampleColor()
 
         sampleBackgroundColor()
-
     }
 
 
@@ -49,17 +57,15 @@ class AnimActivity : AppCompatActivity() {
                 loge("btnTop 觸發點擊！")
                 isSelected = !isSelected
 
-                if (!isSelected) {
-                    text = "向上隱藏"
+                text = if (!isSelected) {
                     ivTop.anim2BottomShow()
+                    "向上隱藏"
                 } else {
-                    text = "向下出現"
                     ivTop.anim2TopHide()
+                    "向下出現"
                 }
             }
         }
-
-
     }
 
     // 向下隱藏 Sample
@@ -70,12 +76,12 @@ class AnimActivity : AppCompatActivity() {
                 loge("btnBtom 觸發點擊！")
                 isSelected = !isSelected
 
-                if (!isSelected) {
-                    text = "向下隱藏"
+                text = if (!isSelected) {
                     ivBottom.anim2TopShow()
+                    "向下隱藏"
                 } else {
-                    text = "向上出現"
                     ivBottom.anim2BottomHide()
+                    "向上出現"
                 }
             }
         }
@@ -87,12 +93,12 @@ class AnimActivity : AppCompatActivity() {
             clickWithTrigger {
                 isSelected = !isSelected
                 loge("btnLeft 觸發點擊！")
-                if (!isSelected) {
-                    text = "向左隱藏"
+                text = if (!isSelected) {
                     ivLeft.anim2RightShow()
+                    "向左隱藏"
                 } else {
-                    text = "向右出現"
                     ivLeft.anim2LeftHide()
+                    "向右出現"
                 }
             }
 
@@ -105,12 +111,12 @@ class AnimActivity : AppCompatActivity() {
             clickWithTrigger {
                 isSelected = !isSelected
                 loge("btnRight 觸發點擊！")
-                if (!isSelected) {
-                    text = "向右隱藏"
+                text = if (!isSelected) {
                     ivRight.anim2LeftShow()
+                    "向右隱藏"
                 } else {
-                    text = "向左出現"
                     ivRight.anim2RightHide()
+                    "向左出現"
                 }
             }
         }
@@ -227,6 +233,87 @@ class AnimActivity : AppCompatActivity() {
             nowColor = Color.WHITE
         }
     }
+
+    // 複合執行
+    private fun compoundExecute() {
+        compoundExecute1()
+
+        compoundExecute2()
+
+        compoundExecute3()
+    }
+
+    // 範例1：旋轉+變色
+    private fun compoundExecute1() = binding.run {
+        btnCompound1.run {
+            clickWithTrigger {
+                isSelected = isSelected.not()
+                text = if (!isSelected) {
+                    animateGroup(
+                        ivCompound1.animRotate(90f, 0f, needExecute = false),
+                        ivCompound1.animColor(Color.BLUE, Color.BLACK, needExecute = false)
+                    )
+                    "旋轉90+變藍"
+                } else {
+                    animateGroup(
+                        ivCompound1.animRotate(0f, 90f, needExecute = false),
+                        ivCompound1.animColor(Color.BLACK, Color.BLUE, needExecute = false)
+                    )
+                    "變回去"
+                }
+            }
+        }
+    }
+
+    // 範例2：縮小+淡出
+    private fun compoundExecute2() = binding.run {
+        btnCompound2.run {
+            clickWithTrigger {
+                isSelected = isSelected.not()
+                text = if (!isSelected) {
+                    animateGroup(
+                        ivCompound2.animScale(0.5f, 1f, 2000L, needExecute = false), // Duration可以不同
+                        ivCompound2.animAlpha(0.5f, 1f, needExecute = false)
+                    )
+                    "縮小0.5+透明度0.5"
+                } else {
+                    animateGroup(
+                        ivCompound2.animScale(1f, 0.5f, 2000L, needExecute = false),
+                        ivCompound2.animAlpha(1f, 0.5f, needExecute = false)
+                    )
+                    "變回去"
+                }
+            }
+        }
+    }
+
+    // 範例3：向右隱藏+旋轉
+    private fun compoundExecute3() = binding.run {
+        btnCompound3.run {
+            clickWithTrigger {
+                isSelected = isSelected.not()
+                text = if (!isSelected) {
+                    animateGroup(
+                        ivCompound3.anim2LeftShow(needExecute = false),
+                        ivCompound3.animRotate(270f, 90f,2000L, needExecute = false)
+                    )
+                    "向右隱藏+旋轉"
+                } else {
+                    animateGroup(
+                        ivCompound3.anim2RightHide(2000L, needExecute = false),
+                        ivCompound3.animRotate(90f, 270f, needExecute = false)
+                    )
+                    "變回去"
+                }
+            }
+        }
+    }
+
+
+    private fun continuousExecute() {
+    }
+
+
 
 }
 

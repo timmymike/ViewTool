@@ -21,8 +21,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="單一執行效果"
-                android:textColor="@color/black" />
+                android:text="單一型執行效果"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -81,6 +82,7 @@
                     <ImageView
                         android:id="@+id/iv_bottom"
                         android:layout_width="match_parent"
+                        android:rotation="180"
                         android:layout_height="match_parent"
                         android:src="@drawable/baseline_arrow_circle_up_24" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -114,7 +116,7 @@
                         android:id="@+id/iv_left"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:rotation="90"
+                        android:rotation="270"
                         android:src="@drawable/baseline_arrow_circle_up_24" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -273,8 +275,8 @@
                     android:id="@+id/tv_scale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="當前倍率：1.00"
                     android:layout_marginStart="10dp"
+                    android:text="當前倍率：1.00"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_scale_down"
@@ -305,7 +307,7 @@
                     android:id="@+id/btn_color_blue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="變藍"
+                    android:text="顏色變藍"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_scale_down"
                     app:layout_constraintStart_toStartOf="parent"
@@ -315,7 +317,7 @@
                     android:id="@+id/btn_color_red"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="變紅"
+                    android:text="顏色變紅"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -326,7 +328,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="變綠"
+                    android:text="顏色變綠"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_color_black"
                     app:layout_constraintStart_toEndOf="@+id/btn_color_blue"
@@ -337,7 +339,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="變黑"
+                    android:text="顏色變黑"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_color_blue"
@@ -369,7 +371,7 @@
                     android:id="@+id/btn_bg_blue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="變藍"
+                    android:text="背景變藍"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_scale_down"
                     app:layout_constraintStart_toStartOf="parent"
@@ -379,7 +381,7 @@
                     android:id="@+id/btn_bg_red"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="變紅"
+                    android:text="背景變紅"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -390,7 +392,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="變綠"
+                    android:text="背景變綠"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_bg_black"
                     app:layout_constraintStart_toEndOf="@+id/btn_bg_blue"
@@ -401,7 +403,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="變白"
+                    android:text="背景變白"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_bg_blue"
@@ -424,6 +426,114 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="複合型執行效果"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_compound_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="旋轉90+變藍"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_compound_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_arrow_circle_up_24" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_compound_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="縮小0.5+透明度0.5"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_compound_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_arrow_circle_up_24" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_compound_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="向右隱藏+旋轉"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_compound_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:rotation="90"
+                        android:src="@drawable/baseline_arrow_circle_up_24" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="連續型執行效果"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
