@@ -86,6 +86,28 @@ fun getScreenHeightPixels(): Int {
 }
 
 /**
+ * 設定 View 的高度。(單位: px)
+ * @param value
+ */
+fun View.setHeight(value: Int) {
+    layoutParams?.let {
+        it.height = value
+        this@setHeight.layoutParams = it
+    }
+}
+
+/**
+ * 設定 View 的寬度。(單位: px)
+ * @param value
+ */
+fun View.setWidth(value: Int) {
+    layoutParams?.let {
+        it.width = value
+        this@setWidth.layoutParams = it
+    }
+}
+
+/**
  * 設定 view的長寬 單位為畫素(pixel)
  * @param w
  * @param h
@@ -335,6 +357,7 @@ fun String.getUriImageWidth(context: Context, maxHeight: Int): Int {
 
     return ansWidth.toInt()
 }
+
 /**
  * 繪製後Log出顯示內容的實際寬高(主要用於debug)
  * @param tagName
@@ -347,7 +370,7 @@ fun View.showLayout(tagName: String = "Layout內容寬高"): View = this.also { 
             layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
             val width: Int = layout.measuredWidth
             val height: Int = layout.measuredHeight
-            Log.e(tagName,"內容實際寬高=>{$width,$height} layout=>${layout} ")
+            Log.e(tagName, "內容實際寬高=>{$width,$height} layout=>${layout} ")
         }
     })
 }
