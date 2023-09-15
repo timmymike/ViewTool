@@ -16,43 +16,55 @@ import androidx.core.graphics.drawable.toBitmap
 /**由timmymike整理的畫面美觀工具*/
 /**
  * 設定水波紋
+ * ※ Android 21版以上才有水波紋的效果，23版才可以設定為前景效果。
  * @param colorId 水波紋顏色(Resource編號)
  * @param maskArea 要填滿與顯示的背景
  * @author Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun View.setRippleBackgroundById(@ColorRes colorId: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
+fun View.setRippleForegroundById(@ColorRes colorId: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-        this.background = RippleDrawable(
+        RippleDrawable(
             ColorStateList(
                 arrayOf(intArrayOf()),
                 intArrayOf(this.getResourceColor(colorId))
             ),
             if (showOrigBgAfterAddRipple) maskArea else null,
             maskArea?.current
-        )
+        ).let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                this@setRippleForegroundById.foreground = it
+            } else {
+                this@setRippleForegroundById.background = it
+            }
+        }
     }
 }
 
 /**
  * 設定水波紋
+ * ※ Android 21版以上才有水波紋的效果，23版才可以設定為前景效果。
  * @param color 水波紋顏色
  * @param maskArea 要填滿與顯示的背景
  * @author Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun View.setRippleBackground(color: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
+fun View.setRippleForeground(color: Int, maskArea: Drawable? = background, showOrigBgAfterAddRipple: Boolean = true) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-        this.background = RippleDrawable(
+        RippleDrawable(
             ColorStateList(
                 arrayOf(intArrayOf()),
                 intArrayOf(color)
             ),
             if (showOrigBgAfterAddRipple) maskArea else null,
             maskArea?.current
-        )
+        ).let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                this@setRippleForeground.foreground = it
+            } else {
+                this@setRippleForeground.background = it
+            }
+        }
     }
 }
 

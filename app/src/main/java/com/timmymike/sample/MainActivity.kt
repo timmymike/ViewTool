@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 //            setBackgroundResource(R.drawable.ic_class_checkbox_checked)
 //            background = setPressedImage(R.drawable.ic_class_checkbox_checked,-1)
 //            setRippleBackgroundById(android.R.color.holo_red_dark)
-            setRippleBackground(Color.BLUE)
+            setRippleForeground(Color.BLUE)
 
         }
         var count = 0
@@ -76,14 +76,14 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener { isSelected = !isSelected }
             setClickBgStateById(R.color.purple_700, R.color.teal_700, R.color.white)
             setClickImgStateById(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_launcher_foreground, R.drawable.ic_class_checkbox_checked)
-            setRippleBackgroundById(android.R.color.holo_green_dark)
+            setRippleForegroundById(android.R.color.holo_green_dark)
         }
         findViewById<CheckBox>(R.id.cb_test).run {
             setOnClickListener { isSelected = !isSelected }
             text = getResourceString(R.string.app_name)
             setCheckDrawable(R.drawable.ic_class_checkbox_uncheck, R.drawable.ic_class_checkbox_checked)
             setClickBgStateById(R.color.purple_200, R.color.teal_700)
-            setRippleBackgroundById(android.R.color.holo_red_dark)
+            setRippleForegroundById(android.R.color.holo_red_dark)
         }
     }
 
