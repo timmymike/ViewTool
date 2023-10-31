@@ -31,7 +31,7 @@ val Number.spToAutoWidth
  * @date formatted 2023/03/21
  * @return dp根據裝置動態計算 回傳pixel
  * 使用範例：
- * 100.spToPx
+ * 100.spToPx，會回傳這個裝置轉換為px的數值
  */
 val Number.spToPx
     get() =
@@ -51,7 +51,7 @@ val Number.pxToSp
  * @date formatted 2023/03/21
  * @return dp根據裝置動態計算 回傳pixel
  * 使用範例：
- * 100.dpToPx
+ * 100.dpToPx，會回傳這個裝置轉換為px的數值
  */
 val Number.dpToPx
     get() =
@@ -71,9 +71,7 @@ val Number.pxToDp
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun getScreenWidthPixels(): Int {
-    return resourcesDisplayMetrics.widthPixels
-}
+fun getScreenWidthPixels(): Int = resourcesDisplayMetrics.widthPixels
 
 /**
  * 取得螢幕高度 單位為整數(pixel)
@@ -81,31 +79,28 @@ fun getScreenWidthPixels(): Int {
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun getScreenHeightPixels(): Int {
-    return resourcesDisplayMetrics.heightPixels
-}
+fun getScreenHeightPixels(): Int = resourcesDisplayMetrics.heightPixels
+
 
 /**
  * 設定 View 的高度。(單位: px)
  * @param value
  */
-fun View.setHeight(value: Int) {
+fun View.setHeight(value: Int) =
     layoutParams?.let {
         it.height = value
         this@setHeight.layoutParams = it
     }
-}
 
 /**
  * 設定 View 的寬度。(單位: px)
  * @param value
  */
-fun View.setWidth(value: Int) {
+fun View.setWidth(value: Int) =
     layoutParams?.let {
         it.width = value
         this@setWidth.layoutParams = it
     }
-}
 
 /**
  * 設定 view的長寬 單位為畫素(pixel)
@@ -131,20 +126,35 @@ fun View.setViewSize(w: Int, h: Int) {
 
 /**
  * 設定 view的長寬 單位為dp
- * @param view
  * @param w
  * @param h
  * @author Wang / Robert
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun View.setViewSizeByDpUnit(w: Int, h: Int) {
-    setViewSize(w.dpToPx, h.dpToPx)
-}
+fun View.setViewSizeByDpUnit(w: Int, h: Int) = setViewSize(w.dpToPx, h.dpToPx)
+
+
+/**
+ * 設定 方形(Square) view的長寬 單位為畫素(pixel)
+ * @param dim  預設定的方形邊長
+ * @editor Timmy.Hsieh
+ * @date formatted 2023/10/31
+ */
+fun View.setSquSize(dim: Int) = this.setViewSize(dim, dim)
+
+
+/**
+ * 設定 方形(Square) view的長寬 單位為畫素(pixel)
+ * @param dim  預設定的方形邊長
+ * @editor Timmy.Hsieh
+ * @date formatted 2023/10/31
+ */
+fun View.setSquSizeByDpUnit(dim: Int) = this.setViewSize(dim.dpToPx, dim.dpToPx)
+
 
 /**
  * 設定 view的長寬 單位為畫素(pixel) 自動高度
- * @param view
  * @param w
  * @param rid
  * @author Wang / Robert
@@ -167,7 +177,6 @@ fun View.setViewSizeByResWidth(w: Int, rid: Int) {
 
 /**
  * 設定 view的長寬 單位為畫素(pixel) 自動寬度
- * @param view
  * @param h
  * @param rid
  * @author Wang / Robert
@@ -302,7 +311,7 @@ fun Context.getDrawableHeight(id: Int, maxWidth: Int): Int {
 
 /**
  * 取得uri資源的圖片高度
- * @param String 圖片資源的Uri位置(content://...)
+ * @class String 圖片資源的Uri位置(content://...)
  * @author Wang / Robert Chou didi31139@gmail.com
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
@@ -340,12 +349,12 @@ fun Context.getDrawableWidth(id: Int, maxHeight: Int): Int {
 
 /**
  * 取得uri資源的圖片寬度
- * @param String 圖片資源的Uri位置(content://...)
+ * @class String  圖片資源的Uri位置(content://...)
  * @author Wang / Robert Chou didi31139@gmail.com
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun String.getUriImageWidth(context: Context, maxHeight: Int): Int {
+fun String.getUriImageWidth(maxHeight: Int): Int {
     val options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
     BitmapFactory.decodeFile(this, options)
