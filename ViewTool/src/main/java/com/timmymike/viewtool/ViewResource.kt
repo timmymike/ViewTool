@@ -21,13 +21,13 @@ fun Context.getResourceColor(colorId: Int) = kotlin.runCatching { ContextCompat.
 
 fun Context.getResourceDrawable(drawableID: Int) = kotlin.runCatching { ContextCompat.getDrawable(this, drawableID) }.getOrNull() ?: ColorDrawable(Color.TRANSPARENT)
 
-fun Context.getResourceString(stringID: Int) = kotlin.runCatching { this.resources.getString(stringID, this.theme) }.getOrNull() ?: ""
+fun Context.getResourceString(stringID: Int) = kotlin.runCatching { this.resources.getString(stringID) }.getOrNull() ?: ""
 
 fun Context.getResourceColorOrNull(colorId: Int) = kotlin.runCatching { ContextCompat.getColor(this, colorId) }.getOrNull()
 
 fun Context.getResourceDrawableOrNull(drawableID: Int) = kotlin.runCatching { ContextCompat.getDrawable(this, drawableID) }.getOrNull()
 
-fun Context.getResourceStringOrNull(stringID: Int) = kotlin.runCatching { this.resources.getString(stringID, this.theme) }.getOrNull()
+fun Context.getResourceStringOrNull(stringID: Int) = kotlin.runCatching { this.resources.getString(stringID) }.getOrNull()
 
 
 fun View.getResourceColor(colorId: Int) = this.context.getResourceColor(colorId)
