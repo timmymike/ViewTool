@@ -135,6 +135,22 @@ fun Context.getRoundBg(
     return createShapeDrawable(this, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
 }
 
+
+/**
+ * @param corner 圓角弧度(Dp)
+ * @param bgColorID 背景填滿色
+ * @param strokeColorID 邊框顏色
+ * @param strokeWidth 邊框粗細 (Dp)
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/06
+ * 直接傳入Px單位的版本，以畫出更細的邊線
+ */
+fun Context.getRoundBgPx(
+    corner: Int,
+    bgColorID: Int, strokeColorID: Int = 0, strokeWidth: Int = 0
+): GradientDrawable {
+    return createShapeDrawable(this, bgColorID, floatArrayOf(corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat()), strokeWidth, strokeColorID, GradientDrawable.RECTANGLE)
+}
 /**
  * @param tldp 左上弧度 (Dp)
  * @param trdp 右上弧度 (Dp)
@@ -167,6 +183,37 @@ fun Context.getRectangleBg(
     val layerDrawable = LayerDrawable(arrayOf<Drawable>(drawable))
     val w = strokeWidth.dpToPx
     layerDrawable.setLayerInset(0, if (left) 0 else -w, if (top) 0 else -w, if (right) 0 else -w, if (bottom) 0 else -w)
+
+    return layerDrawable
+}
+
+/**
+ * @param tldp 左上弧度 (Dp)
+ * @param trdp 右上弧度 (Dp)
+ * @param bldp 左下弧度 (Dp)
+ * @param brdp 右下弧度 (Dp)
+ * @param left 是否顯示邊框 true為顯示
+ * @param top 是否顯示邊框 true為顯示
+ * @param right 是否顯示邊框 true為顯示
+ * @param bottom 是否顯示邊框 true為顯示
+ * @param bgColorID 背景填滿色
+ * @param strokeColorID 邊框顏色
+ * @param strokeWidth 邊框粗細 (Dp)
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/06
+ * 直接傳入Px單位的版本，以畫出更細的邊線
+ */
+
+fun Context.getRectangleBgPx(
+    tldp: Int = 0, trdp: Int = 0, bldp: Int = 0, brdp: Int = 0,
+    left: Boolean = true, top: Boolean = true, right: Boolean = true, bottom: Boolean = true,
+    bgColorID: Int = 0, strokeColorID: Int = 0, strokeWidth: Int = 0
+): LayerDrawable {
+
+    val drawable = createShapeDrawable(this, bgColorID, floatArrayOf(tldp.toFloat(), tldp.toFloat(), trdp.toFloat(), trdp.toFloat(), brdp.toFloat(), brdp.toFloat(), bldp.toFloat(), bldp.toFloat()), strokeWidth, strokeColorID, GradientDrawable.RECTANGLE)
+
+    val layerDrawable = LayerDrawable(arrayOf<Drawable>(drawable))
+    layerDrawable.setLayerInset(0, if (left) 0 else -strokeWidth, if (top) 0 else -strokeWidth, if (right) 0 else -strokeWidth, if (bottom) 0 else -strokeWidth)
 
     return layerDrawable
 }
