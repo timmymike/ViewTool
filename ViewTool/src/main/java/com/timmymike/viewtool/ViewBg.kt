@@ -8,9 +8,12 @@ import android.graphics.drawable.*
 import android.os.Build
 import android.view.View
 import androidx.annotation.ColorRes
+import androidx.annotation.RawRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.caverock.androidsvg.SVG
+import java.io.InputStream
 
 
 /**由timmymike整理的畫面美觀工具*/
@@ -114,6 +117,15 @@ fun View.setRippleForeground(color: Int, maskArea: Drawable? = background, showO
             }
         }
     }
+}
+/**
+ * @param svgString 要轉換為SVG的字串
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/13
+ */
+fun getDrawableBySVGString(svgString:String): PictureDrawable {
+    // 創建 SVG 解析器
+    return PictureDrawable(SVG.getFromString(svgString).renderToPicture())
 }
 
 /**
