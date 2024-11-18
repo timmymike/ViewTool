@@ -31,9 +31,9 @@ class MainActivity : AppCompatActivity() {
             setClickTextColorStateById(android.R.color.holo_green_dark, android.R.color.holo_blue_dark)
 
             background = setClickBgState(
-                getRoundBg(500,android.R.color.holo_purple,R.color.black,20),
-                getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
-                getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
+                getRoundBgById(500,android.R.color.holo_purple,R.color.black,20),
+                getRectangleBgById(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
+                getRectangleBgById(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
             )
 //            background = getRepeatDrawable(R.drawable.ic_launcher_foreground)
 //            background = getTintedDrawable(R.drawable.ic_launcher_foreground, android.R.color.holo_green_dark)
@@ -59,8 +59,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             background = setClickBgState(
-                getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
-                selectedDrawable = getRectangleBg(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
+                getRectangleBgById(tldp = 40, trdp = 0, brdp = 40, left = false, bgColorID = R.color.black, strokeWidth = 10, strokeColorID = R.color.teal_200),
+                selectedDrawable = getRectangleBgById(tldp = 40, trdp = 0, brdp = 40, left = false, bottom = false, bgColorID = R.color.white, strokeWidth = 10, strokeColorID = R.color.purple_700),
             )
 
             setClickTextColorState(Color.RED,Color.BLUE,Color.GRAY)

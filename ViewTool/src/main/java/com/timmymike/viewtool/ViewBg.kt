@@ -8,12 +8,10 @@ import android.graphics.drawable.*
 import android.os.Build
 import android.view.View
 import androidx.annotation.ColorRes
-import androidx.annotation.RawRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.caverock.androidsvg.SVG
-import java.io.InputStream
 
 
 /**由timmymike整理的畫面美觀工具*/
@@ -136,7 +134,7 @@ fun getDrawableBySVGString(svgString:String): PictureDrawable {
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun Context.getRoundBg(
+fun Context.getRoundBgById(
     corner: Int,
     bgColorID: Int, strokeColorID: Int = 0, strokeWidth: Int = 0
 ): GradientDrawable {
@@ -144,7 +142,7 @@ fun Context.getRoundBg(
     val tr = corner.dpToPx
     val bl = corner.dpToPx
     val br = corner.dpToPx
-    return createShapeDrawable(this, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
+    return createShapeDrawableById(this, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
 }
 
 
@@ -157,12 +155,50 @@ fun Context.getRoundBg(
  * @date formatted 2024/11/06
  * 直接傳入Px單位的版本，以畫出更細的邊線
  */
-fun Context.getRoundBgPx(
+fun Context.getRoundBgPxById(
     corner: Int,
     bgColorID: Int, strokeColorID: Int = 0, strokeWidth: Int = 0
 ): GradientDrawable {
-    return createShapeDrawable(this, bgColorID, floatArrayOf(corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat()), strokeWidth, strokeColorID, GradientDrawable.RECTANGLE)
+    return createShapeDrawableById(this, bgColorID, floatArrayOf(corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat()), strokeWidth, strokeColorID, GradientDrawable.RECTANGLE)
 }
+/**
+ * @param corner 圓角弧度(Dp)
+ * @param bgColor 背景填滿色
+ * @param strokeColor 邊框顏色
+ * @param strokeWidth 邊框粗細 (Dp)
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/18
+ * 直接傳入Px單位的版本，以畫出更細的邊線
+ * 新增不使用資源Color，直接傳入顏色的Int值的方法。
+ */
+fun getRoundBgPx(
+    corner: Int,
+    bgColor: Int, strokeColor: Int = 0, strokeWidth: Int = 0
+): GradientDrawable {
+    return createShapeDrawable( bgColor, floatArrayOf(corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat(), corner.toFloat()), strokeWidth, strokeColor, GradientDrawable.RECTANGLE)
+}
+
+/**
+ * @param corner 圓角弧度(Dp)
+ * @param bgColor 背景填滿色
+ * @param strokeColor 邊框顏色
+ * @param strokeWidth 邊框粗細 (Dp)
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/18
+ * 新增不使用資源Color，直接傳入顏色的Int值的方法。
+ */
+fun getRoundBg(
+    corner: Int,
+    bgColor: Int, strokeColor: Int = 0, strokeWidth: Int = 0
+): GradientDrawable {
+    val tl = corner.dpToPx
+    val tr = corner.dpToPx
+    val bl = corner.dpToPx
+    val br = corner.dpToPx
+    return createShapeDrawable( bgColor, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColor, GradientDrawable.RECTANGLE)
+}
+
+
 /**
  * @param tldp 左上弧度 (Dp)
  * @param trdp 右上弧度 (Dp)
@@ -179,7 +215,7 @@ fun Context.getRoundBgPx(
  * @date formatted 2023/03/21
  */
 
-fun Context.getRectangleBg(
+fun Context.getRectangleBgById(
     tldp: Int = 0, trdp: Int = 0, bldp: Int = 0, brdp: Int = 0,
     left: Boolean = true, top: Boolean = true, right: Boolean = true, bottom: Boolean = true,
     bgColorID: Int = 0, strokeColorID: Int = 0, strokeWidth: Int = 0
@@ -190,7 +226,7 @@ fun Context.getRectangleBg(
     val bl = bldp.dpToPx
     val br = brdp.dpToPx
 
-    val drawable = createShapeDrawable(this, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
+    val drawable = createShapeDrawableById(this, bgColorID, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColorID, GradientDrawable.RECTANGLE)
 
     val layerDrawable = LayerDrawable(arrayOf<Drawable>(drawable))
     val w = strokeWidth.dpToPx
@@ -216,13 +252,84 @@ fun Context.getRectangleBg(
  * 直接傳入Px單位的版本，以畫出更細的邊線
  */
 
-fun Context.getRectangleBgPx(
+fun Context.getRectangleBgPxById(
     tldp: Int = 0, trdp: Int = 0, bldp: Int = 0, brdp: Int = 0,
     left: Boolean = true, top: Boolean = true, right: Boolean = true, bottom: Boolean = true,
     bgColorID: Int = 0, strokeColorID: Int = 0, strokeWidth: Int = 0
 ): LayerDrawable {
 
-    val drawable = createShapeDrawable(this, bgColorID, floatArrayOf(tldp.toFloat(), tldp.toFloat(), trdp.toFloat(), trdp.toFloat(), brdp.toFloat(), brdp.toFloat(), bldp.toFloat(), bldp.toFloat()), strokeWidth, strokeColorID, GradientDrawable.RECTANGLE)
+    val drawable = createShapeDrawableById(this, bgColorID, floatArrayOf(tldp.toFloat(), tldp.toFloat(), trdp.toFloat(), trdp.toFloat(), brdp.toFloat(), brdp.toFloat(), bldp.toFloat(), bldp.toFloat()), strokeWidth, strokeColorID, GradientDrawable.RECTANGLE)
+
+    val layerDrawable = LayerDrawable(arrayOf<Drawable>(drawable))
+    layerDrawable.setLayerInset(0, if (left) 0 else -strokeWidth, if (top) 0 else -strokeWidth, if (right) 0 else -strokeWidth, if (bottom) 0 else -strokeWidth)
+
+    return layerDrawable
+}
+
+
+
+/**
+ * @param tldp 左上弧度 (Dp)
+ * @param trdp 右上弧度 (Dp)
+ * @param bldp 左下弧度 (Dp)
+ * @param brdp 右下弧度 (Dp)
+ * @param left 是否顯示邊框 true為顯示
+ * @param top 是否顯示邊框 true為顯示
+ * @param right 是否顯示邊框 true為顯示
+ * @param bottom 是否顯示邊框 true為顯示
+ * @param bgColor 背景填滿色
+ * @param strokeColor 邊框顏色
+ * @param strokeWidth 邊框粗細 (Dp)
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/18
+ * 新增不使用資源Color，直接傳入顏色的Int值的方法。
+ */
+
+fun getRectangleBg(
+    tldp: Int = 0, trdp: Int = 0, bldp: Int = 0, brdp: Int = 0,
+    left: Boolean = true, top: Boolean = true, right: Boolean = true, bottom: Boolean = true,
+    bgColor: Int = 0, strokeColor: Int = 0, strokeWidth: Int = 0
+): LayerDrawable {
+
+    val tl = tldp.dpToPx
+    val tr = trdp.dpToPx
+    val bl = bldp.dpToPx
+    val br = brdp.dpToPx
+
+    val drawable = createShapeDrawable( bgColor, floatArrayOf(tl.toFloat(), tl.toFloat(), tr.toFloat(), tr.toFloat(), br.toFloat(), br.toFloat(), bl.toFloat(), bl.toFloat()), strokeWidth.dpToPx, strokeColor, GradientDrawable.RECTANGLE)
+
+    val layerDrawable = LayerDrawable(arrayOf<Drawable>(drawable))
+    val w = strokeWidth.dpToPx
+    layerDrawable.setLayerInset(0, if (left) 0 else -w, if (top) 0 else -w, if (right) 0 else -w, if (bottom) 0 else -w)
+
+    return layerDrawable
+}
+
+/**
+ * @param tldp 左上弧度 (Dp)
+ * @param trdp 右上弧度 (Dp)
+ * @param bldp 左下弧度 (Dp)
+ * @param brdp 右下弧度 (Dp)
+ * @param left 是否顯示邊框 true為顯示
+ * @param top 是否顯示邊框 true為顯示
+ * @param right 是否顯示邊框 true為顯示
+ * @param bottom 是否顯示邊框 true為顯示
+ * @param bgColor 背景填滿色
+ * @param strokeColor 邊框顏色
+ * @param strokeWidth 邊框粗細 (Dp)
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/18
+ * 直接傳入Px單位的版本，以畫出更細的邊線
+ * 新增不使用資源Color，直接傳入顏色的Int值的方法。
+ */
+
+fun getRectangleBgPx(
+    tldp: Int = 0, trdp: Int = 0, bldp: Int = 0, brdp: Int = 0,
+    left: Boolean = true, top: Boolean = true, right: Boolean = true, bottom: Boolean = true,
+    bgColor: Int = 0, strokeColor: Int = 0, strokeWidth: Int = 0
+): LayerDrawable {
+
+    val drawable = createShapeDrawable( bgColor, floatArrayOf(tldp.toFloat(), tldp.toFloat(), trdp.toFloat(), trdp.toFloat(), brdp.toFloat(), brdp.toFloat(), bldp.toFloat(), bldp.toFloat()), strokeWidth, strokeColor, GradientDrawable.RECTANGLE)
 
     val layerDrawable = LayerDrawable(arrayOf<Drawable>(drawable))
     layerDrawable.setLayerInset(0, if (left) 0 else -strokeWidth, if (top) 0 else -strokeWidth, if (right) 0 else -strokeWidth, if (bottom) 0 else -strokeWidth)
@@ -236,10 +343,19 @@ fun Context.getRectangleBgPx(
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-fun Context.getOVALPointDrawable(colorID: Int): GradientDrawable {
-    return createShapeDrawable(this, colorID, floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f), 0, 0, GradientDrawable.OVAL)
+fun Context.getOVALPointDrawableById(colorID: Int): GradientDrawable {
+    return createShapeDrawableById(this, colorID, floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f), 0, 0, GradientDrawable.OVAL)
 }
-
+/**
+ * 回傳色碼的橢圓形背景
+ * @author Robert Chou didi31139@gmail.com
+ * @editor Timmy.Hsieh
+ * @date formatted 2024/11/18
+ * 新增不使用資源Color，直接傳入顏色的Int值的方法。
+ */
+fun getOVALPointDrawable(color: Int): GradientDrawable {
+    return createShapeDrawable( color, floatArrayOf(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f), 0, 0, GradientDrawable.OVAL)
+}
 /**
  * 取得 填滿Drawable的背景
  * @author Robert Chou didi31139@gmail.com
@@ -283,17 +399,46 @@ fun Context.getTintedDrawable(drawableId: Int, colorId: Int): Drawable {
 
 /**
  * 建立形狀的圖片並回傳
- * @param context
- * @param colorID ex:填滿顏色
+ * @param color ex:填滿顏色
  * @param radii The corners are ordered top-left, top-right, bottom-right, bottom-left.
  * @param strokeWidth 外框畫筆寬度
- * @param strokeColorID 外框顏色
+ * @param strokeColor 外框顏色
  * @param gradientDrawableShape 圖片形狀 ex:GradientDrawable.RECTANGLE
  * @author Robert Chou didi31139@gmail.com
  * @editor Timmy.Hsieh
  * @date formatted 2023/03/21
  */
-private fun createShapeDrawable(context: Context, colorID: Int, radii: FloatArray?, strokeWidth: Int, strokeColorID: Int, gradientDrawableShape: Int): GradientDrawable {
+private fun createShapeDrawable( color: Int, radii: FloatArray?, strokeWidth: Int, strokeColor: Int, gradientDrawableShape: Int): GradientDrawable {
+
+    val gradientDrawable = GradientDrawable()
+    if (color != 0)
+        gradientDrawable.setColor(color)
+    if (radii != null) {
+        gradientDrawable.cornerRadii = radii
+    }
+    if (strokeWidth != 0 && strokeColor != 0) {
+        gradientDrawable.setStroke(strokeWidth, strokeColor)
+    }
+
+    if (gradientDrawableShape != 0) {
+        gradientDrawable.shape = gradientDrawableShape
+    }
+    return gradientDrawable
+}
+
+/**
+ * 建立形狀的圖片並回傳
+ * @param context
+ * @param colorID ex:填滿顏色 // Resource資源檔
+ * @param radii The corners are ordered top-left, top-right, bottom-right, bottom-left.
+ * @param strokeWidth 外框畫筆寬度
+ * @param strokeColorID 外框顏色 // Resource資源檔
+ * @param gradientDrawableShape 圖片形狀 ex:GradientDrawable.RECTANGLE
+ * @author Robert Chou didi31139@gmail.com
+ * @editor Timmy.Hsieh
+ * @date formatted 2023/03/21
+ */
+private fun createShapeDrawableById(context: Context, colorID: Int, radii: FloatArray?, strokeWidth: Int, strokeColorID: Int, gradientDrawableShape: Int): GradientDrawable {
 
     val gradientDrawable = GradientDrawable()
     if (colorID != 0)
