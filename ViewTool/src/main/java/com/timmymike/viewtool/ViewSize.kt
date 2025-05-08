@@ -22,7 +22,8 @@ import kotlin.math.roundToInt
 val Number.spToAutoWidth
     get() =
         resourcesDisplayMetrics.let { metric ->
-            ((this.toFloat() * metric.widthPixels) / metric.scaledDensity / 360f)
+            // 螢幕寬度與基準寬度(360dp)的比例，乘以原始SP值
+            ((this.toFloat() * metric.widthPixels) / metric.density / 360f)
         }
 
 /**
@@ -33,17 +34,15 @@ val Number.spToAutoWidth
  * 使用範例：
  * 100.spToPx，會回傳這個裝置轉換為px的數值
  */
-val Number.spToPx
-    get() =
+val Number.spToPx: Int
+    get() = run {
+        val metrics = resourcesDisplayMetrics
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
             this.toFloat(),
-            resourcesDisplayMetrics
+            metrics
         ).roundToInt()
-
-val Number.pxToSp
-    get() =
-        this.toFloat() / resourcesDisplayMetrics.scaledDensity
+    }
 
 /**
  * DP單位數值 根據裝置動態 回傳像素:
@@ -260,7 +259,7 @@ fun View.getRealityHeight(): Int {
 }
 
 /**
- * 取得測量後的實際寬度(pixel)
+ * 設定文字大小(sp)
  * @author Timmy.Hsieh
  * @date formatted 2023/03/21
  */
@@ -274,9 +273,15 @@ fun TextView.setTextSize(sp: Int) {
  * @date formatted 2023/03/21
  * */
 fun ViewGroup.resetLayoutTextSize() {
-    val scale = resourcesDisplayMetrics.scaledDensity
+    // 使用 TypedValue.applyDimension 來替代 scaledDensity
+    val context = context
     resetLayout {
-        (it as? TextView)?.setTextSize((it.textSize / scale + 0.5f).toInt())
+        (it as? TextView)?.let { textView ->
+            // 取得原始 SP 值
+            val originalSpValue = textView.textSize / context.resources.displayMetrics.density
+            // 設置文字大小，使用 SP 單位
+            textView.setTextSize(originalSpValue.roundToInt())
+        }
     }
 }
 
@@ -373,7 +378,7 @@ fun String.getUriImageWidth(maxHeight: Int): Int {
  * @author Timmy.Hsieh
  * @date 2023/08/24
  */
-fun View.showLayout(tagName: String = "Layout內容寬高"): View = this.also { layout ->
+fun View.showLayout(tagName: String = "Layout內容寬高${this}"): View = this.also { layout ->
     this.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
             layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -384,3 +389,19 @@ fun View.showLayout(tagName: String = "Layout內容寬高"): View = this.also { 
     })
 }
 
+/**
+ * 繪製完Layout，取得實際寬高以後要執行的動作
+ * @param action,,,第一個參數：width,,,第二個參數：height
+ * @author Timmy.Hsieh
+ * @date 2023/08/24
+ */
+fun View.onLayoutComplete(action: (Int, Int) -> Unit): View = this.also { layout ->
+    this.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            val width: Int = layout.measuredWidth
+            val height: Int = layout.measuredHeight
+            action.invoke(width, height)
+        }
+    })
+}

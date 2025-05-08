@@ -7,14 +7,32 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.timmymike.logtool.loge
-import com.timmymike.viewtool.*
+import com.timmymike.viewtool.clickWithTrigger
+import com.timmymike.viewtool.dpToPx
+import com.timmymike.viewtool.getRealityWidth
+import com.timmymike.viewtool.getRectangleBgById
+import com.timmymike.viewtool.getResourceString
+import com.timmymike.viewtool.getRoundBgById
+import com.timmymike.viewtool.getScreenWidthPixels
+import com.timmymike.viewtool.resetLayoutTextSize
+import com.timmymike.viewtool.setCheckDrawable
+import com.timmymike.viewtool.setClickBgState
+import com.timmymike.viewtool.setClickBgStateById
+import com.timmymike.viewtool.setClickImgStateById
+import com.timmymike.viewtool.setClickTextColorState
+import com.timmymike.viewtool.setClickTextColorStateById
+import com.timmymike.viewtool.setPaddingByDpUnit
+import com.timmymike.viewtool.setRippleForeground
+import com.timmymike.viewtool.setRippleForegroundById
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        setContentView(R.layout.activity_main)
+        findViewById<ConstraintLayout>(R.id.cl_content).resetLayoutTextSize()
         findViewById<TextView>(R.id.tv_test).run {
             isClickable = true
             clickWithTrigger {
@@ -53,7 +71,6 @@ class MainActivity : AppCompatActivity() {
 //                setRippleBackgroundById(android.R.color.holo_orange_dark)
             }
 
-            setTextSize(50)
             30.let {
                 setPaddingByDpUnit(it, it, it, it)
             }
